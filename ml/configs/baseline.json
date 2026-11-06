@@ -1,0 +1,16 @@
+{
+  "seed": 42,
+  "frames_per_video": 12,
+  "min_usable_frames": 4,
+  "image_size": 224,
+  "detector_max_side": 640,
+  "detector_score_threshold": 0.9,
+  "min_face_size": 40,
+  "crop_margin": 0.25,
+  "max_secondary_face_area_ratio": 0.35,
+  "batch_size": 8,
+  "cpu_threads": 2,
+  "backbones": ["efficientnet_b0", "resnet18"],
+  "regularization_c": [0.01, 0.1, 1.0, 10.0],
+  "bootstrap_repeats": 300
+}

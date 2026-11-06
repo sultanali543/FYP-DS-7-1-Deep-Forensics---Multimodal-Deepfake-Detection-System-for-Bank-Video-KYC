@@ -1,0 +1,7 @@
+numpy>=2.2,<3
+Pillow>=11,<13
+opencv-python-headless>=4.10,<5
+scikit-learn>=1.6,<2
+matplotlib>=3.9,<4
+psutil>=6,<8
+pytest>=8,<10

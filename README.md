@@ -6,7 +6,15 @@ A research prototype for reviewing recorded video verification sessions for visu
 
 The React frontend supports MP4 selection and preview, five explicit demonstration scenarios, simulated processing, visual result screens, recent sessions, JSON export, and printable sample reports. Demo scores are fixed fixtures and do not describe the uploaded video.
 
-Real model inference, the FastAPI backend, audio detection, Grad-CAM generation, SHA-256 calculation, digital signing, and protected audit logging are planned milestones.
+The Python visual baseline under `ml/` imports the labeled DFDC training sample, prepares face crops, compares frozen EfficientNet-B0 and ResNet18 features with trained logistic classifiers, and evaluates a selected checkpoint. Dataset-dependent results require a completed training run; pretrained ImageNet weights alone are not a deepfake detector.
+
+The FastAPI backend, frontend connection to real inference, audio detection, Grad-CAM generation, uploaded-video hashing, digital signing, and protected audit logging are planned milestones.
+
+## Run the visual baseline
+
+On Windows, run **SETUP_BASELINE.cmd**, then **TRAIN_BASELINE.cmd** and supply the path to the official DFDC labeled training ZIP. The workflow reads one archived video at a time to avoid a second full dataset extraction. After training, **PREDICT_VIDEO.cmd** analyzes a new clip.
+
+See [baseline setup, model rationale, and evaluation](ml/README.md) for the steps, limitations, and outputs. The frontend remains explicitly in demo mode until a backend connects it to the trained model.
 
 ## Run the frontend
 
