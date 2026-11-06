@@ -7,7 +7,8 @@ import ProcessingPage from './pages/ProcessingPage.jsx';
 import ResultsPage from './pages/ResultsPage.jsx';
 import HistoryPage from './pages/HistoryPage.jsx';
 import { analysisService } from './services/analysisService.js';
-import { readHistory, writeHistory, validateVideo } from './lib/utils.js';
+import { readHistory, writeHistory, validateVideo, validateLiveMetadata } from './lib/utils.js';
+import WorkflowGuide from './components/WorkflowGuide.jsx';
 
 function saveDownload(blob, filename) {
   const url = URL.createObjectURL(blob);
@@ -34,11 +35,29 @@ export default function App() {
   const [helpOpen, setHelpOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
   const [appError, setAppError] = useState(null);
+  const [health, setHealth] = useState(null);
   const [history, setHistory] = useState(() => { try { return readHistory(window.sessionStorage); } catch { return []; } });
   const startController = useRef(null);
   const reportController = useRef(null);
   const fileRef = useRef(file);
   fileRef.current = file;
+
+  useEffect(() => {
+    if (analysisService.isDemo) return;
+    const controller = new AbortController();
+    let timer;
+    async function checkHealth() {
+      try {
+        const state = await analysisService.getHealth({ signal: controller.signal });
+        if (!controller.signal.aborted) setHealth(state);
+      } catch (error) {
+        if (!controller.signal.aborted) setHealth({ ready: false, reason: error.message });
+      }
+      if (!controller.signal.aborted) timer = setTimeout(checkHealth, 15000);
+    }
+    checkHealth();
+    return () => { controller.abort(); clearTimeout(timer); };
+  }, []);
 
   useEffect(() => {
     if (!file) { setPreviewUrl(null); return; }
@@ -97,6 +116,7 @@ export default function App() {
 
   async function startAnalysis(example = false) {
     if (submitting || active) return;
+    if (!analysisService.isDemo && !health?.ready) return;
     if (!example && (!file || !ready || fileError)) return;
     const selectedSource = example ? { kind: 'example', name: 'Example verification session', size: null, duration: null } : { kind: 'upload', name: file.name, size: file.size, duration: source.duration, width: source.width, height: source.height };
     const selectedFile = file;
@@ -138,12 +158,12 @@ export default function App() {
   return <>
     <AppLayout {...{ view, isDemo, busy }} historyCount={history.length} onNavigate={navigate} onHelp={() => setHelpOpen(true)}>
       {appError && <div className="app-error"><Notice tone="danger" icon="warning">{appError}</Notice><button className="text-button" onClick={() => setAppError(null)}>Dismiss</button></div>}
-      {view === 'upload' && <UploadPage {...{ isDemo, scenario, setScenario, file, source, ready, submitting }} url={previewUrl} error={fileError} onSelect={selectFile} onReady={(metadata) => { if (fileRef.current !== file) return; setSource(metadata); setReady(true); setFileError(null); }} onInvalid={invalidatePreview} onRemove={() => { setFile(null); setSource(null); setReady(false); setFileError(null); }} onStart={() => startAnalysis(false)} onExample={() => startAnalysis(true)} />}
+      {view === 'upload' && <UploadPage {...{ isDemo, health, scenario, setScenario, file, source, ready, submitting }} url={previewUrl} error={fileError} onSelect={selectFile} onReady={(metadata) => { if (fileRef.current !== file) return; const error = isDemo ? null : validateLiveMetadata(metadata); setSource(metadata); setReady(!error); setFileError(error); }} onInvalid={invalidatePreview} onRemove={() => { setFile(null); setSource(null); setReady(false); setFileError(null); }} onStart={() => startAnalysis(false)} onExample={() => startAnalysis(true)} />}
       {view === 'processing' && active && <ProcessingPage {...{ active, progress, isDemo }} onLeave={() => { setActive(null); setProgress(null); setView('upload'); }} />}
       {view === 'results' && result && <ResultsPage {...{ result, downloading }} previewUrl={previewAnalysisId === result.id ? previewUrl : null} onNew={resetUpload} onRetry={retryAnalysis} onReport={() => setReportOpen(true)} onJson={() => saveDownload(new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' }), `${result.id}-result.json`)} onBackendReport={downloadBackendReport} />}
       {view === 'history' && <HistoryPage records={history} onOpen={(record) => { setResult(record); setAppError(null); setView('results'); }} onClear={() => setHistory([])} onNew={resetUpload} />}
     </AppLayout>
-    {helpOpen && <Modal title="About this workspace" onClose={() => setHelpOpen(false)} footer={<Button onClick={() => setHelpOpen(false)}>Back to workspace</Button>}><div className="guide-content"><p className="eyebrow">DEEP FORENSICS / RESEARCH PROTOTYPE</p><h3>A workspace for reviewing video verification sessions.</h3><p>The proposed system combines facial manipulation detection, audio spoof detection, explainability, and forensic reporting. This frontend lets you explore that workflow before model integration.</p><ol><li><strong>Choose a video or an example.</strong><span>MP4 previews work locally. Examples have no attached video.</span></li><li><strong>Select a demo scenario.</strong><span>Completed, uncertain, insufficient-evidence, and failure outcomes can all be explored.</span></li><li><strong>Review and export.</strong><span>Inspect the result, export JSON, or print a clearly labeled sample report.</span></li></ol><Notice>Demo scores are fixed fixtures. Audio detection, Grad-CAM, cryptographic fingerprints, and digital signing are not implemented.</Notice><p className="guide-small">To connect FastAPI later, set VITE_USE_MOCKS=false and configure VITE_API_BASE_URL. The frontend README describes the expected endpoints.</p></div></Modal>}
+    {helpOpen && <Modal title="About this workspace" onClose={() => setHelpOpen(false)} footer={<Button onClick={() => setHelpOpen(false)}>Back to workspace</Button>}><WorkflowGuide isDemo={isDemo} /></Modal>}
     {reportOpen && result && <Modal title={result.mode === 'demo' ? 'Sample report preview' : 'Analysis summary'} onClose={() => setReportOpen(false)} footer={<><Button variant="secondary" onClick={() => setReportOpen(false)}>Close</Button><Button icon="print" onClick={() => window.print()}>Print / Save PDF</Button></>}><ReportView result={result} /></Modal>}
     {result?.status === 'complete' && <div className="print-report"><ReportView result={result} /></div>}
   </>;

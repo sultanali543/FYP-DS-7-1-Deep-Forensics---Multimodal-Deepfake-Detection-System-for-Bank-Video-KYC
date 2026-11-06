@@ -1,5 +1,12 @@
 export const MAX_FILE_SIZE = 50 * 1024 * 1024;
 
+export function validateLiveMetadata({ duration, width, height }) {
+  if (!Number.isFinite(duration) || duration <= 0) return 'This video has no readable duration.';
+  if (duration > 60) return 'Choose a clip up to 60 seconds for this CPU prototype.';
+  if (width * height > 3840 * 2160 || Math.max(width, height) > 4096) return 'Choose a video at 4K resolution or smaller; 1080p is recommended.';
+  return null;
+}
+
 export function validateVideo(file) {
   if (!file) return 'Choose an MP4 video to continue.';
   if (!file.size) return 'This file is empty. Choose another video.';

@@ -23,6 +23,12 @@ export function createAnalysisService({ useMocks = true, baseUrl = 'http://127.0
 
   return {
     isDemo: useMocks,
+    async getHealth({ signal } = {}) {
+      const response = await request(`${api}/api/health`, { signal });
+      const health = await response.json();
+      if (health.service !== 'deep-forensics' || typeof health.ready !== 'boolean') throw new Error('This server is not the Deep Forensics backend.');
+      return health;
+    },
     async createAnalysis(file, { scenario = 'fake', source, signal } = {}) {
       signal?.throwIfAborted();
       if (useMocks) {
@@ -63,7 +69,11 @@ export function createAnalysisService({ useMocks = true, baseUrl = 'http://127.0
 }
 
 const env = import.meta.env ?? {};
-export const analysisService = createAnalysisService({
-  useMocks: env.VITE_USE_MOCKS !== 'false',
-  baseUrl: env.VITE_API_BASE_URL || 'http://127.0.0.1:8000',
-});
+export function serviceConfig(environment) {
+  // START_APP builds in live mode and serves the UI and API on the same origin.
+  return {
+    useMocks: environment.MODE === 'live' ? false : environment.VITE_USE_MOCKS !== 'false',
+    baseUrl: environment.MODE === 'live' ? '/' : environment.VITE_API_BASE_URL || 'http://127.0.0.1:8000',
+  };
+}
+export const analysisService = createAnalysisService(serviceConfig(env));

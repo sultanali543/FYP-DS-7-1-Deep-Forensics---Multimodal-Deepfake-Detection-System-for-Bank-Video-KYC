@@ -1,8 +1,14 @@
 # Deep Forensics frontend
 
-A local React and Vite application for the Deep Forensics video verification project. It includes video selection and preview, five explicit demo scenarios, simulated processing, results, recent sessions, JSON export, and printable sample reports.
+A React and Vite interface for local visual deepfake screening. The connected app runs the trained Python model; the separate demo retains five fixed scenarios. Both offer video preview, results, recent sessions, JSON export, and printable summaries.
 
-## Start on Windows
+## Run the connected model
+
+Double-click **START_APP.cmd** in the parent folder to build the live interface and serve it with the Python backend at http://127.0.0.1:8000. No frontend environment edits are needed. Confirm **Local model ready**, select an MP4, and click **Start analysis**. This uses the real local checkpoint. See the [complete guide](../backend/README.md).
+
+Live uploads are limited to 50 MiB, 60 seconds, 60 FPS, and 4K; 1080p is recommended. Results display actual frame coverage, decision threshold, model version, and upload cleanup status. The model remains experimental. Audio, Grad-CAM, hashing, and digital signatures remain unavailable.
+
+## Start the separate demo on Windows
 
 Double-click `START_FRONTEND.cmd` in the parent project folder. It installs missing dependencies, starts the development server, and opens the browser. Keep the terminal open while using the application. Press Ctrl+C in that terminal to stop it.
 
@@ -34,6 +40,7 @@ No dataset or Python backend is needed for Demo mode. No model inference occurs.
 ```powershell
 npm test
 npm run build
+npm run build:live
 npm run preview
 ```
 
@@ -51,9 +58,9 @@ The tests cover unusable uploads, missing audio, demo stage progression, insuffi
 | src/lib/utils.js | Validation, result checks, formatting, and storage helpers |
 | src/styles.css | Responsive layout and report print styles |
 
-## Connect FastAPI later
+## Frontend development with the live backend
 
-Copy .env.example to .env.local and change:
+For hot reload alongside the running Python backend, copy .env.example to .env.local and change:
 
 ```dotenv
 VITE_USE_MOCKS=false
@@ -62,15 +69,16 @@ VITE_API_BASE_URL=http://127.0.0.1:8000
 
 Restart Vite after changing environment variables. These frontend settings are public configuration, not secret storage. Demo mode is the default when VITE_USE_MOCKS is omitted. Setting the literal string false selects the live service; live API failures never silently fall back to demo predictions.
 
-The backend must allow the frontend development origin through CORS, for example http://127.0.0.1:5173. Adjust this if Vite prints a different port. The expected endpoints are:
+The backend allows localhost and 127.0.0.1 on development port 5173 through CORS. Keep Vite on this port or adjust the explicit backend allowlist. The API is:
 
 | Endpoint | Request and response |
 | --- | --- |
+| GET /api/health | Model readiness and version |
 | POST /api/analyses | Multipart field file; returns a string id and status queued |
 | GET /api/analyses/{id} | Returns id, scope, status, stage, and completed results |
-| GET /api/analyses/{id}/report | Returns a PDF when report_available is true |
+| GET /api/analyses/{id}/report | Reserved for later; currently unavailable and report_available is false |
 
-Supported statuses are queued, running, complete, failed, and insufficient_evidence. Known stage identifiers are queued, validating, extracting, analyzing, and reporting. Unknown running stages use a generic processing label. The frontend stops polling on completion, failure, insufficient evidence, or navigation away. Returning to upload stops monitoring; it does not cancel a real server job.
+The live build uses same-origin API requests and is separate from the default demo build. Supported statuses are queued, running, complete, failed, and insufficient_evidence. Demo stages are queued, validating, extracting, analyzing, and reporting. The actual backend uses queued and analyzing, with validation, face extraction, and prediction grouped under analyzing. Unknown running stages use a generic processing label. The frontend stops polling on completion, failure, insufficient evidence, or navigation away. Returning to upload stops monitoring; it does not cancel a real server job.
 
 Example completed response:
 
