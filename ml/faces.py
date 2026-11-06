@@ -113,9 +113,17 @@ class FaceCropper:
             if total < 1 or not np.isfinite(fps) or fps <= 0:
                 raise ValueError("Video frame count or frame rate is unavailable.")
             frames, attempts = [], []
-            for position in frame_positions(total, self.settings["frames_per_video"]):
-                capture.set(cv2.CAP_PROP_POS_FRAMES, position)
-                success, frame = capture.read()
+            positions = frame_positions(total, self.settings["frames_per_video"])
+            targets = set(positions)
+            # Decode once in order. Repeated seeks re-decode long H.264 frame groups.
+            for position in range(positions[-1] + 1):
+                if not capture.grab():
+                    attempts.extend({"frame_index": target, "reason": "unreadable_frame"}
+                                    for target in positions if target >= position)
+                    break
+                if position not in targets:
+                    continue
+                success, frame = capture.retrieve()
                 if not success:
                     attempts.append({"frame_index": position, "reason": "unreadable_frame"})
                     continue
@@ -135,6 +143,7 @@ def face_cache_signature(manifest, settings, detector_path):
         "detector_sha256": file_sha256(detector_path),
         "jpeg_quality": 95,
         "opencv_version": cv2.__version__,
+        "sampler": "uniform_sequential_decode_v1",
     })
 
 

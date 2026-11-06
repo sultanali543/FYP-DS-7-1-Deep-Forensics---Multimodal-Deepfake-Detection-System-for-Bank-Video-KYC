@@ -101,6 +101,28 @@ def test_uniform_frame_sampling_and_boundary_crop_remain_valid():
     assert right - left == bottom - top
 
 
+def test_sequential_video_sampling_preserves_the_requested_frame_indices(tmp_path):
+    import cv2
+    from ml.common import load_settings
+    from ml.faces import FaceCropper
+
+    video = tmp_path / "sampling.avi"
+    writer = cv2.VideoWriter(str(video), cv2.VideoWriter_fourcc(*"MJPG"), 10, (64, 64))
+    assert writer.isOpened()
+    for index in range(40):
+        writer.write(np.full((64, 64, 3), index * 5, dtype=np.uint8))
+    writer.release()
+    # Exercise actual decoding without needing a face in the synthetic clip.
+    cropper = FaceCropper.__new__(FaceCropper)
+    cropper.settings = load_settings()
+    cropper.settings["frames_per_video"] = 4
+    cropper.crop = lambda image: (image, "usable", {"box": [0, 0, 64, 64], "face_score": 1.0})
+    frames, attempts = cropper.sample_video(video)
+    assert [frame["frame_index"] for frame in frames] == [0, 13, 26, 39]
+    assert [round(float(frame["image"].mean())) for frame in frames] == [0, 65, 130, 195]
+    assert [attempt["reason"] for attempt in attempts] == ["usable"] * 4
+
+
 def test_frame_aggregation_gives_each_video_one_evaluation_record():
     scores = aggregate_scores(["a", "a", "a", "b"], [0.9, 0.9, 0.3, 0.1])
     assert scores["a"] == pytest.approx(0.7)
