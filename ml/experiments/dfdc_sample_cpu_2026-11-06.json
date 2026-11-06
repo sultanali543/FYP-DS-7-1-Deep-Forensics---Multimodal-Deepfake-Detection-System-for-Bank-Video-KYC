@@ -1,0 +1,254 @@
+{
+  "experiment": "dfdc_sample_cpu_baseline_2026-11-06",
+  "training_code_revision": "e1f4ae9ab283cf7ed40f9166998e9812c07df42c",
+  "model_created_at_utc": "2026-11-06T14:27:58.786373+00:00",
+  "dataset": {
+    "name": "dfdc_labeled_training_sample",
+    "labeled_videos": 400,
+    "archive_bytes": 1868756561,
+    "archive_sha256": "ffe0ca18e0d1342612e56cb3d55addb069c9e0e32781ef104c7c698b23a387c4",
+    "manifest_fingerprint": "624683451d55ba3ce0c19506fa0a82851e1cb67bb60cfdccc1e0a4c39ac77bbd",
+    "requested_counts": {
+      "train": {
+        "real": 46,
+        "fake": 193,
+        "total": 239
+      },
+      "val": {
+        "real": 15,
+        "fake": 65,
+        "total": 80
+      },
+      "test": {
+        "real": 16,
+        "fake": 65,
+        "total": 81
+      }
+    },
+    "split_method": "StratifiedGroupKFold: 3 train folds, 1 validation fold, 1 test fold",
+    "seed": 42,
+    "coverage": {
+      "train": {
+        "requested_videos": 239,
+        "analyzed_videos": 210,
+        "real_analyzed": 41,
+        "fake_analyzed": 169,
+        "source_groups_requested": 145,
+        "source_groups_analyzed": 135
+      },
+      "val": {
+        "requested_videos": 80,
+        "analyzed_videos": 72,
+        "real_analyzed": 14,
+        "fake_analyzed": 58,
+        "source_groups_requested": 49,
+        "source_groups_analyzed": 46
+      },
+      "test": {
+        "requested_videos": 81,
+        "analyzed_videos": 79,
+        "real_analyzed": 15,
+        "fake_analyzed": 64,
+        "source_groups_requested": 50,
+        "source_groups_analyzed": 48
+      }
+    },
+    "preprocessing": {
+      "usable_videos": 361,
+      "insufficient_evidence": 39,
+      "failed_videos": 0
+    }
+  },
+  "model": {
+    "version": "visual-baseline-bb68915008",
+    "backbone": "resnet18",
+    "training_type": "frozen_ImageNet_encoder_plus_regularized_logistic_regression",
+    "settings": {
+      "seed": 42,
+      "frames_per_video": 12,
+      "min_usable_frames": 4,
+      "image_size": 224,
+      "detector_max_side": 640,
+      "detector_score_threshold": 0.9,
+      "min_face_size": 40,
+      "crop_margin": 0.25,
+      "max_secondary_face_area_ratio": 0.35,
+      "batch_size": 8,
+      "cpu_threads": 2,
+      "backbones": [
+        "efficientnet_b0",
+        "resnet18"
+      ],
+      "regularization_c": [
+        0.01,
+        0.1,
+        1.0,
+        10.0
+      ],
+      "bootstrap_repeats": 300
+    },
+    "C": 1.0,
+    "threshold": 0.6634235139936209,
+    "checkpoint_bytes": 44791434,
+    "checkpoint_sha256": "5c08dc08484243fa8a773d9e9a02a34e6322d3972749e02c9650b841d4f22451",
+    "selection_rule": "highest validation video balanced accuracy, then validation AUC, then smaller C"
+  },
+  "validation_comparison": [
+    {
+      "backbone": "efficientnet_b0",
+      "C": 1.0,
+      "threshold": 0.8110642412846739,
+      "validation": {
+        "n_videos": 72,
+        "real_videos": 14,
+        "fake_videos": 58,
+        "threshold": 0.8110642412846739,
+        "accuracy": 0.7777777777777778,
+        "balanced_accuracy": 0.8620689655172413,
+        "fake_precision": 1.0,
+        "fake_recall": 0.7241379310344828,
+        "fake_f1": 0.84,
+        "roc_auc": 0.9002463054187192,
+        "log_loss": 0.390180361762675,
+        "fake_accepted_as_real_rate": 0.27586206896551724,
+        "real_flagged_as_fake_rate": 0.0,
+        "confusion_matrix": [
+          [
+            14,
+            0
+          ],
+          [
+            16,
+            42
+          ]
+        ],
+        "majority_class_accuracy": 0.8055555555555556,
+        "majority_class_balanced_accuracy": 0.5
+      },
+      "fit_seconds": 0.3091693000023952,
+      "iterations": 90
+    },
+    {
+      "backbone": "resnet18",
+      "C": 1.0,
+      "threshold": 0.6634235139936209,
+      "validation": {
+        "n_videos": 72,
+        "real_videos": 14,
+        "fake_videos": 58,
+        "threshold": 0.6634235139936209,
+        "accuracy": 0.875,
+        "balanced_accuracy": 0.895320197044335,
+        "fake_precision": 0.9803921568627451,
+        "fake_recall": 0.8620689655172413,
+        "fake_f1": 0.9174311926605505,
+        "roc_auc": 0.9100985221674878,
+        "log_loss": 0.3746592240885829,
+        "fake_accepted_as_real_rate": 0.13793103448275862,
+        "real_flagged_as_fake_rate": 0.07142857142857142,
+        "confusion_matrix": [
+          [
+            13,
+            1
+          ],
+          [
+            8,
+            50
+          ]
+        ],
+        "majority_class_accuracy": 0.8055555555555556,
+        "majority_class_balanced_accuracy": 0.5
+      },
+      "fit_seconds": 0.14315850000275532,
+      "iterations": 80
+    }
+  ],
+  "test": {
+    "evaluation_unit": "video",
+    "metrics": {
+      "n_videos": 79,
+      "real_videos": 15,
+      "fake_videos": 64,
+      "threshold": 0.6634235139936209,
+      "accuracy": 0.9113924050632911,
+      "balanced_accuracy": 0.8432291666666667,
+      "fake_precision": 0.9384615384615385,
+      "fake_recall": 0.953125,
+      "fake_f1": 0.9457364341085271,
+      "roc_auc": 0.8916666666666667,
+      "log_loss": 0.3000930567935172,
+      "fake_accepted_as_real_rate": 0.046875,
+      "real_flagged_as_fake_rate": 0.26666666666666666,
+      "confusion_matrix": [
+        [
+          11,
+          4
+        ],
+        [
+          3,
+          61
+        ]
+      ],
+      "majority_class_accuracy": 0.810126582278481,
+      "majority_class_balanced_accuracy": 0.5
+    },
+    "coverage": {
+      "requested_videos": 81,
+      "analyzed_videos": 79,
+      "rejected_videos": 2,
+      "fraction_analyzed": 0.9753086419753086
+    },
+    "uncertainty": {
+      "method": "source-group bootstrap",
+      "requested_repeats": 300,
+      "valid_repeats": 300,
+      "intervals_95": {
+        "balanced_accuracy": [
+          0.7003667953667954,
+          0.9541787624140564
+        ],
+        "roc_auc": [
+          0.7766855203619909,
+          0.981797263681592
+        ]
+      }
+    }
+  },
+  "software_verification": {
+    "tests_passed": 18,
+    "prediction_matches_cached_features": true,
+    "absolute_score_difference": 1.7881393432617188e-07,
+    "blank_video_returns_insufficient_evidence": true,
+    "cold_prediction_seconds_on_one_training_clip": 9.949042599997483
+  },
+  "runtime": {
+    "device": "CPU",
+    "gpu_used": false,
+    "encoder_threads": 2,
+    "ram_gb": 7.85,
+    "python": "3.13.3",
+    "package_versions": {
+      "torch": "2.15.0+cpu",
+      "torchvision": "0.29.2+cpu",
+      "opencv-python-headless": "4.14.0.94",
+      "numpy": "2.5.4",
+      "pillow": "12.3.0",
+      "scikit-learn": "1.9.1"
+    },
+    "feature_extraction_seconds": {
+      "efficientnet_b0": 309.81774640000003,
+      "resnet18": 236.6118557000009
+    }
+  },
+  "limitations": [
+    "DFDC labels are clip-level and can include voice-only manipulation; this baseline examines faces only.",
+    "Grouping uses original-video references, not verified actor identities.",
+    "Small-sample results do not establish real-world or banking readiness.",
+    "The encoder is frozen, not fine-tuned on deepfake data.",
+    "Class weighting and threshold selection can affect score calibration; scores are not fraud probabilities.",
+    "Only 15 real videos were analyzable in the test split; the observed real-video false-positive rate was 4/15.",
+    "The 91.1% accuracy is conditional on 79 analyzable videos; two requested test clips received insufficient evidence.",
+    "The single-clip prediction check verifies software consistency, not independent accuracy.",
+    "The frontend remains in demo mode until a backend loads this checkpoint."
+  ]
+}

@@ -29,6 +29,7 @@ The user wants development work committed on separate feature branches.
 - Run npm test and npm run build from frontend/ for relevant application changes.
 - The default app uses clearly labeled demo fixtures. Preserve that distinction until real inference is connected.
 - The Python CPU visual baseline lives under ml/. Run .venv/Scripts/python.exe -m pytest ml/tests -q for relevant model pipeline changes.
+- The first DFDC sample CPU experiment is trained locally under data/runs/cpu_baseline/. Its measured results and provenance are recorded in ml/experiments/dfdc_sample_cpu_2026-11-06.md and the accompanying JSON. Checkpoint weights are excluded from Git.
 - Distinguish a verified training pipeline from an actually trained and evaluated checkpoint. Never invent accuracy results or treat ImageNet weights as a deepfake classifier.
 - Preserve source-group train/validation/test separation. Select models and thresholds using validation only; do not tune against held-out test results.
 - Frontend integration with trained visual inference, audio analysis, Grad-CAM generation, uploaded-video hashing, and digital signing are later implementation milestones.

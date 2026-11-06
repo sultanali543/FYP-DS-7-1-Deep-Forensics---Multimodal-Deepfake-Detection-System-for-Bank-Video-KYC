@@ -8,6 +8,8 @@ The React frontend supports MP4 selection and preview, five explicit demonstrati
 
 The Python visual baseline under `ml/` imports the labeled DFDC training sample, prepares face crops, compares frozen EfficientNet-B0 and ResNet18 features with trained logistic classifiers, and evaluates a selected checkpoint. Dataset-dependent results require a completed training run; pretrained ImageNet weights alone are not a deepfake detector.
 
+The [first completed CPU baseline experiment](ml/experiments/dfdc_sample_cpu_2026-11-06.md) selected ResNet18 and scored 91.1% accuracy, 84.3% balanced accuracy, and 0.892 AUC on 79 analyzable held-out DFDC sample videos. The report includes coverage, error counts, uncertainty, and limitations. The trained checkpoint is local and excluded from Git.
+
 The FastAPI backend, frontend connection to real inference, audio detection, Grad-CAM generation, uploaded-video hashing, digital signing, and protected audit logging are planned milestones.
 
 ## Run the visual baseline
