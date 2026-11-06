@@ -4,6 +4,8 @@ This is the first **visual-only research baseline** for Deep Forensics. Python c
 
 The [first completed CPU experiment](experiments/dfdc_sample_cpu_2026-11-06.md) selected ResNet18 and measured 91.1% accuracy, 84.3% balanced accuracy, and 0.892 AUC on 79 analyzable held-out sample videos. It missed three fakes and flagged four real videos. These are small-sample results; the checkpoint is stored locally and is not included in Git.
 
+An [external stock-video diagnostic](experiments/external_video_44639_2026-11-06.md) reproduced a FAKE score of 0.994 on a Pixabay clip, raising a likely false-alarm concern. Its authenticity is not independently verified. A high score is not proof of manipulation, and external-video reliability needs further evaluation.
+
 ## What is trained and why
 
 We compare two ImageNet-pretrained image encoders, **EfficientNet-B0** and **ResNet18**, with a small regularized logistic regression classifier. The encoder stays frozen. Only the classifier learns from DFDC labels. This is transfer learning with cached features, not end-to-end CNN fine-tuning.
