@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><title>Frontend MP4 test fixture</title>
+<style>body{font:16px system-ui;max-width:650px;margin:60px auto;padding:20px;color:#20382e}canvas{display:block;margin:24px 0;border-radius:12px}button{padding:12px 20px}p{line-height:1.7}</style>
+<h1>Frontend MP4 test fixture</h1><p>Generate a short synthetic clip for testing local video selection. This is not a dataset sample and contains no person or real verification session.</p>
+<canvas width="320" height="180"></canvas><button id="generate">Create MP4 fixture</button><p id="status" role="status">Checking browser recording support…</p>
+<script>
+  const canvas = document.querySelector('canvas');
+  const context = canvas.getContext('2d');
+  const button = document.getElementById('generate');
+  const status = document.getElementById('status');
+  const types = ['video/mp4;codecs=avc1.42E01E', 'video/mp4'];
+  const mimeType = types.find((type) => window.MediaRecorder?.isTypeSupported(type));
+  button.disabled = !mimeType;
+  status.textContent = mimeType ? 'Ready to create a two-second test clip.' : 'MP4 recording is unavailable in this browser.';
+  function draw(frame = 0) {
+    context.fillStyle = '#163f35'; context.fillRect(0, 0, 320, 180);
+    context.fillStyle = '#c3d7b2'; context.beginPath(); context.arc(42 + (frame % 230), 62, 15, 0, Math.PI * 2); context.fill();
+    context.fillStyle = '#fff'; context.font = '18px sans-serif'; context.fillText('Frontend test clip', 35, 120);
+    context.font = '11px sans-serif'; context.fillText('Synthetic media · no person depicted', 35, 143);
+  }
+  draw();
+  button.onclick = () => {
+    button.disabled = true; status.textContent = 'Creating the MP4 fixture…';
+    const stream = canvas.captureStream(10);
+    const recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 200000 });
+    const chunks = []; let frame = 0;
+    const drawing = setInterval(() => draw(frame += 12), 100);
+    recorder.ondataavailable = (event) => { if (event.data.size) chunks.push(event.data); };
+    recorder.onstop = () => {
+      clearInterval(drawing); stream.getTracks().forEach((track) => track.stop());
+      const blob = new Blob(chunks, { type: 'video/mp4' });
+      const url = URL.createObjectURL(blob); const link = document.createElement('a');
+      link.href = url; link.download = 'frontend-test.mp4'; link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      status.textContent = 'Created frontend-test.mp4. Use it only to check uploading and playback.';
+      button.disabled = false;
+    };
+    recorder.start(); setTimeout(() => recorder.stop(), 2000);
+  };
+</script></html>

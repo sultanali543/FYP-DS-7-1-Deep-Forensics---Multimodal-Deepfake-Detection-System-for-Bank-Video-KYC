@@ -1,0 +1,58 @@
+# Dependencies and generated builds
+node_modules/
+dist/
+build/
+.sites-runtime/
+coverage/
+*.log
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+!**/.env.example
+*.local
+*.pem
+*.key
+credentials.json
+kaggle.json
+
+# Python environments and notebook caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.pytest_cache/
+
+# Local datasets, uploaded media, and model weights
+data/
+datasets/
+faceforensics_data/
+extracted_faces/
+uploads/
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.safetensors
+*.h5
+*.mp4
+*.avi
+*.mov
+*.wav
+*.flac
+*.zip
+*.7z
+
+# Local academic references and QA screenshots
+/*.docx
+/frontend-preview.jpg
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
