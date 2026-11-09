@@ -8,6 +8,8 @@ if errorlevel 1 goto missing_node
 echo Installing the backend packages into this project's existing environment.
 ".venv\Scripts\python.exe" -m pip install -r backend\requirements-dev.txt
 if errorlevel 1 goto failed
+".venv\Scripts\python.exe" -m pip install -r audio\requirements.txt
+if errorlevel 1 goto failed
 cd frontend
 call npm.cmd ci
 if errorlevel 1 goto failed

@@ -1,0 +1,136 @@
+{
+  "status": "trained",
+  "model_version": "audio-asv19la-095854128b36",
+  "track": "ASVspoof 2019 LA",
+  "training_type": "CPU log-mel summary classifier",
+  "selected_candidate": "histgb_100",
+  "threshold": 0.7623000292217216,
+  "feature_version": "logmel128-cepstra40-summary-v1",
+  "dataset_fingerprint": "ea16889550e9944833d4f97cc04dbba0fdbf695176306d0939a4dd9b6ab2a1af",
+  "checkpoint_sha256": "095854128b36c6d7eec03f8fc853e698df974caaf2297493659c389bba5189eb",
+  "checkpoint_bytes": 688214,
+  "selection_split": "ASVspoof 2019 LA development (Hugging Face validation)",
+  "validation_metrics": {
+    "n_videos": 24844,
+    "real_videos": 2548,
+    "fake_videos": 22296,
+    "threshold": 0.7623000292217216,
+    "accuracy": 0.9837787795846079,
+    "balanced_accuracy": 0.973060404918778,
+    "fake_precision": 0.9953391556179013,
+    "fake_recall": 0.9865446716899893,
+    "fake_f1": 0.990922401171303,
+    "roc_auc": 0.9948324075842144,
+    "log_loss": 0.04271859782775358,
+    "fake_accepted_as_real_rate": 0.013455328310010764,
+    "real_flagged_as_fake_rate": 0.04042386185243328,
+    "confusion_matrix": [
+      [
+        2445,
+        103
+      ],
+      [
+        300,
+        21996
+      ]
+    ],
+    "majority_class_accuracy": 0.8974400257607471,
+    "majority_class_balanced_accuracy": 0.5
+  },
+  "candidate_comparison": [
+    {
+      "candidate": "logistic_c0.1",
+      "threshold": 0.5954234004020691,
+      "metrics": {
+        "n_videos": 24844,
+        "real_videos": 2548,
+        "fake_videos": 22296,
+        "threshold": 0.5954234004020691,
+        "accuracy": 0.9692481081951376,
+        "balanced_accuracy": 0.968614725015617,
+        "fake_precision": 0.9962205014749262,
+        "fake_recall": 0.9694115536419089,
+        "fake_f1": 0.9826332060374614,
+        "roc_auc": 0.9954809177956185,
+        "log_loss": 0.07137154210822261,
+        "fake_accepted_as_real_rate": 0.03058844635809114,
+        "real_flagged_as_fake_rate": 0.03218210361067504,
+        "confusion_matrix": [
+          [
+            2466,
+            82
+          ],
+          [
+            682,
+            21614
+          ]
+        ],
+        "majority_class_accuracy": 0.8974400257607471,
+        "majority_class_balanced_accuracy": 0.5
+      }
+    },
+    {
+      "candidate": "logistic_c1",
+      "threshold": 0.6823098063468933,
+      "metrics": {
+        "n_videos": 24844,
+        "real_videos": 2548,
+        "fake_videos": 22296,
+        "threshold": 0.6823098063468933,
+        "accuracy": 0.9717839317340203,
+        "balanced_accuracy": 0.9665513986500454,
+        "fake_precision": 0.9953208862791871,
+        "fake_recall": 0.9731341944743451,
+        "fake_f1": 0.9841025059530559,
+        "roc_auc": 0.9949771438963928,
+        "log_loss": 0.08782791475730328,
+        "fake_accepted_as_real_rate": 0.026865805525654825,
+        "real_flagged_as_fake_rate": 0.040031397174254316,
+        "confusion_matrix": [
+          [
+            2446,
+            102
+          ],
+          [
+            599,
+            21697
+          ]
+        ],
+        "majority_class_accuracy": 0.8974400257607471,
+        "majority_class_balanced_accuracy": 0.5
+      }
+    },
+    {
+      "candidate": "histgb_100",
+      "threshold": 0.7623000292217216,
+      "metrics": {
+        "n_videos": 24844,
+        "real_videos": 2548,
+        "fake_videos": 22296,
+        "threshold": 0.7623000292217216,
+        "accuracy": 0.9837787795846079,
+        "balanced_accuracy": 0.973060404918778,
+        "fake_precision": 0.9953391556179013,
+        "fake_recall": 0.9865446716899893,
+        "fake_f1": 0.990922401171303,
+        "roc_auc": 0.9948324075842144,
+        "log_loss": 0.04271859782775358,
+        "fake_accepted_as_real_rate": 0.013455328310010764,
+        "real_flagged_as_fake_rate": 0.04042386185243328,
+        "confusion_matrix": [
+          [
+            2445,
+            103
+          ],
+          [
+            300,
+            21996
+          ]
+        ],
+        "majority_class_accuracy": 0.8974400257607471,
+        "majority_class_balanced_accuracy": 0.5
+      }
+    }
+  ],
+  "evaluation_note": "These are model-selection metrics, not held-out test accuracy. No 2019 evaluation or 2021 test audio was used."
+}

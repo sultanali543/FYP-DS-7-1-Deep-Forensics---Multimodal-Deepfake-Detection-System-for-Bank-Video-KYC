@@ -23,6 +23,7 @@ def main():
         return 1
     if args.check:
         print(f"Trained model ready: {model['model_version']}")
+        print(f"Audio model: {model.get('audio_model_version', 'not installed')}")
         return 0
     if not (settings.frontend / "index.html").is_file():
         print("The connected frontend has not been built. Run START_APP.cmd.")

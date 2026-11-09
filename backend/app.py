@@ -29,7 +29,18 @@ def model_readiness(settings):
             raise ValueError("Checkpoint checksum mismatch")
         if file_sha256(detector) != provenance["sha256"]:
             raise ValueError("Detector checksum mismatch")
-        return {"ready": True, "model_version": summary["model_version"]}
+        audio = {"audio_ready": False}
+        try:
+            audio_model = settings.audio_run / "model.joblib"
+            audio_summary = json.loads((settings.audio_run / "training_summary.json").read_text(encoding="utf-8"))
+            if file_sha256(audio_model) != audio_summary["checkpoint_sha256"]:
+                raise ValueError("Audio checkpoint checksum mismatch")
+            if audio_summary.get("status") != "trained" or audio_summary.get("feature_version") != "logmel128-cepstra40-summary-v1":
+                raise ValueError("Audio checkpoint format is incompatible")
+            audio = {"audio_ready": True, "audio_model_version": audio_summary["model_version"]}
+        except (OSError, ValueError, KeyError):
+            pass
+        return {"ready": True, "model_version": summary["model_version"], **audio}
     except (OSError, ValueError, KeyError):
         return {"ready": False, "reason": "The trained checkpoint or face detector is missing or damaged. Restore the local baseline files before analyzing videos."}
 
@@ -76,7 +87,7 @@ def create_app(settings=None, *, runner=run_prediction, readiness=model_readines
         yield
         app.state.jobs.close()
 
-    app = FastAPI(title="Deep Forensics local visual baseline", version="0.2.0", lifespan=lifespan)
+    app = FastAPI(title="Deep Forensics local analysis", version="0.3.0", lifespan=lifespan)
     app.add_middleware(UploadGuard, settings=settings)
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost", "testserver"])
     app.add_middleware(CORSMiddleware, allow_origins=list(settings.origins),
@@ -85,7 +96,7 @@ def create_app(settings=None, *, runner=run_prediction, readiness=model_readines
     @app.get("/api/health")
     def health(request: Request):
         state = request.app.state.model
-        return {"service": "deep-forensics", "mode": "live", "scope": "visual_only",
+        return {"service": "deep-forensics", "mode": "live", "scope": "multimodal" if state.get("audio_ready") else "visual_only",
                 "status": "ready" if state["ready"] else "unavailable", **state,
                 "max_upload_bytes": settings.max_bytes, "max_video_seconds": 60,
                 "retention": "Uploaded copies are deleted after analysis. Results are kept in memory."}

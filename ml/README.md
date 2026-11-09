@@ -1,6 +1,6 @@
 # CPU visual baseline
 
-This is the first **visual-only research baseline** for Deep Forensics. Python code handles dataset labels, face extraction, training, evaluation, and prediction. The React frontend remains a separate demonstration until a backend connects it to a trained checkpoint.
+This is the first **visual research baseline** for Deep Forensics. Python code handles dataset labels, face extraction, training, evaluation, and prediction. The [connected backend](../backend/README.md) uses its trained checkpoint; an [audio baseline](../audio/README.md) is trained separately.
 
 The [first completed CPU experiment](experiments/dfdc_sample_cpu_2026-11-06.md) selected ResNet18 and measured 91.1% accuracy, 84.3% balanced accuracy, and 0.892 AUC on 79 analyzable held-out sample videos. It missed three fakes and flagged four real videos. These are small-sample results; the checkpoint is stored locally and is not included in Git.
 
@@ -109,7 +109,7 @@ No dataset clips, face crops, checkpoints, or credentials belong in Git. The Git
 
 DFDC labels can include face swaps, voice swaps, or both. A face-only system may miss a voice-only fake. Original-video grouping does not prove actor-disjoint or session-disjoint splits because verified actor identities are not supplied here. A 400-video sample also cannot establish performance on banking KYC recordings, new manipulation methods, or different compression.
 
-Scores are experimental visual classifier outputs, not calibrated probabilities of fraud. Insufficient faces produce `insufficient_evidence`. Audio analysis, temporal modeling, Grad-CAM, signing, and frontend/backend integration remain separate milestones. No banking eligibility decision should be automated from this baseline.
+Scores are experimental visual classifier outputs, not calibrated probabilities of fraud. Insufficient faces produce `insufficient_evidence`. Audio analysis and frontend/backend integration now have separate implementations. Temporal modeling, Grad-CAM, and signing remain later milestones. No banking eligibility decision should be automated from this baseline.
 
 Next, retain this experiment as the CPU reference, obtain FaceForensics++ access, and use the university GPU for controlled fine-tuning and larger independent evaluation. Compare methods using fixed splits and validation decisions; report final tests without changing settings to improve those test scores.
 

@@ -167,7 +167,7 @@ def test_readiness_cors_host_unknown_jobs_and_restart(settings):
 def test_readiness_checks_checkpoint_and_detector_hashes(tmp_path):
     run, assets = tmp_path / "run", tmp_path / "assets"
     run.mkdir(); assets.mkdir()
-    settings = Settings(run=run, assets=assets)
+    settings = Settings(run=run, assets=assets, audio_run=tmp_path / "audio")
     assert model_readiness(settings)["ready"] is False
     checkpoint, detector = b"checkpoint", b"detector"
     (run / "model.pt").write_bytes(checkpoint)
@@ -175,6 +175,16 @@ def test_readiness_checks_checkpoint_and_detector_hashes(tmp_path):
     (assets / "yunet_source.json").write_text(json.dumps({"sha256": hashlib.sha256(detector).hexdigest()}))
     (run / "training_summary.json").write_text(json.dumps({"checkpoint_sha256": hashlib.sha256(checkpoint).hexdigest(), "model_version": "test"}))
     assert model_readiness(settings)["ready"] is True
+    audio_run = settings.audio_run
+    audio_run.mkdir(parents=True, exist_ok=True)
+    (audio_run / "model.joblib").write_bytes(b"audio-checkpoint")
+    (audio_run / "training_summary.json").write_text(json.dumps({
+        "checkpoint_sha256": hashlib.sha256(b"audio-checkpoint").hexdigest(),
+        "model_version": "audio-test", "status": "trained",
+        "feature_version": "logmel128-cepstra40-summary-v1"}))
+    assert model_readiness(settings)["audio_ready"] is True
+    (audio_run / "model.joblib").write_bytes(b"damaged")
+    assert model_readiness(settings)["audio_ready"] is False
     (run / "model.pt").write_bytes(b"damaged")
     assert model_readiness(settings)["ready"] is False
 

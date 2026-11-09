@@ -116,6 +116,14 @@ test('malformed completed API results are rejected instead of showing a safe ver
   await assert.rejects(service.getAnalysis('broken'), /incomplete visual result/);
 });
 
+test('multimodal results require a measured audio score', () => {
+  const base = { id: 'job', mode: 'live', scope: 'multimodal', status: 'complete',
+    visual: { status: 'complete', score: 0.2, verdict: 'REAL' } };
+  assert.throws(() => validateResult(base), /incomplete audio result/);
+  const result = { ...base, audio: { status: 'complete', score: 0.8, verdict: 'FAKE' } };
+  assert.equal(validateResult(result), result);
+});
+
 test('aborted requests preserve AbortError for polling cleanup', async () => {
   const controller = new AbortController(); controller.abort();
   const service = createAnalysisService();

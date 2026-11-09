@@ -47,6 +47,9 @@ export function validateResult(result) {
   if (!visual || visual.status !== 'complete' || !Number.isFinite(visual.score) || visual.score < 0 || visual.score > 1 || !['REAL', 'SUSPICIOUS', 'FAKE'].includes(visual.verdict)) {
     throw new Error('The analysis service returned an incomplete visual result.');
   }
+  if (result.scope === 'multimodal' && (result.audio?.status !== 'complete' || !Number.isFinite(result.audio.score) || result.audio.score < 0 || result.audio.score > 1 || !['REAL', 'FAKE'].includes(result.audio.verdict))) {
+    throw new Error('The analysis service returned an incomplete audio result.');
+  }
   return result;
 }
 

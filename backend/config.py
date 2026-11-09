@@ -10,6 +10,7 @@ MAX_VIDEO_FRAMES = 3600
 @dataclass(frozen=True)
 class Settings:
     run: Path = ROOT / "data/runs/cpu_baseline"
+    audio_run: Path = ROOT / "data/runs/audio_baseline"
     assets: Path = ROOT / "data/assets"
     temporary: Path = ROOT / "data/backend/temporary"
     frontend: Path = ROOT / "frontend/dist-live"

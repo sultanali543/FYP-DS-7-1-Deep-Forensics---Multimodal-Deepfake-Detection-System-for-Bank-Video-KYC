@@ -1,6 +1,6 @@
 @echo off
 setlocal
-title Deep Forensics - Connected visual model
+title Deep Forensics - Connected analysis
 cd /d "%~dp0"
 if not exist ".venv\Scripts\python.exe" goto missing_setup
 if not exist "frontend\node_modules\vite\bin\vite.js" goto missing_setup

@@ -2,6 +2,7 @@
 import argparse
 import json
 import math
+import subprocess
 from pathlib import Path
 
 from .config import MAX_VIDEO_FRAMES, MAX_VIDEO_PIXELS, MAX_VIDEO_SECONDS
@@ -37,6 +38,7 @@ def main():
     parser.add_argument("--video", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--run", type=Path, required=True)
+    parser.add_argument("--audio-run", type=Path, required=True)
     parser.add_argument("--assets", type=Path, required=True)
     args = parser.parse_args()
     try:
@@ -47,6 +49,15 @@ def main():
         # Reuse the exact CLI prediction path, checkpoint, crops, and threshold.
         from ml.predict import predict_video
         result = {**predict_video(args.run, args.video, assets=args.assets), "source_metadata": source}
+        if (args.audio_run / "model.joblib").is_file():
+            try:
+                from audio.predict import predict_video_audio
+                result["audio"] = predict_video_audio(args.audio_run, args.video)
+            except (OSError, ValueError, RuntimeError, KeyError, ImportError, subprocess.TimeoutExpired):
+                result["audio"] = {"status": "unavailable", "score": None,
+                                   "reason": "The audio model could not analyze this track."}
+            if result["audio"]["status"] == "complete":
+                result["scope"] = "multimodal"
     args.output.write_text(json.dumps(result, allow_nan=False), encoding="utf-8")
 
 

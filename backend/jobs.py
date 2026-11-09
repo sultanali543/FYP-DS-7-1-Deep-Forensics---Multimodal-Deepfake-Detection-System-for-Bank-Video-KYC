@@ -22,7 +22,8 @@ def run_prediction(video, directory, settings):
     output = directory / "prediction.json"
     subprocess.run(
         [sys.executable, "-m", "backend.worker", "--video", str(video),
-         "--output", str(output), "--run", str(settings.run), "--assets", str(settings.assets)],
+         "--output", str(output), "--run", str(settings.run), "--assets", str(settings.assets),
+         "--audio-run", str(settings.audio_run)],
         cwd=ROOT, check=True, timeout=settings.timeout_seconds,
         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
         creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
