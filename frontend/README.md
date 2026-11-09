@@ -1,12 +1,12 @@
 # Deep Forensics frontend
 
-A React and Vite interface for local visual deepfake screening. The connected app runs the trained Python model; the separate demo retains five fixed scenarios. Both offer video preview, results, recent sessions, JSON export, and printable summaries.
+A React and Vite interface for local visual and audio deepfake screening. The connected app runs the trained Python models and displays separate channel results; the separate demo retains five fixed scenarios. Both offer video preview, results, recent sessions, JSON export, and printable summaries.
 
 ## Run the connected model
 
 Double-click **START_APP.cmd** in the parent folder to build the live interface and serve it with the Python backend at http://127.0.0.1:8000. No frontend environment edits are needed. Confirm **Local model ready**, select an MP4, and click **Start analysis**. This uses the real local checkpoint. See the [complete guide](../backend/README.md).
 
-Live uploads are limited to 50 MiB, 60 seconds, 60 FPS, and 4K; 1080p is recommended. Results display actual frame coverage, decision threshold, model version, and upload cleanup status. The model remains experimental. Audio, Grad-CAM, hashing, and digital signatures remain unavailable.
+Live uploads are limited to 50 MiB, 60 seconds, 60 FPS, and 4K; 1080p is recommended. Results display actual frame coverage, separate channel scores and thresholds when available, model versions, and upload cleanup status. The models remain experimental. Calibrated fusion, Grad-CAM, upload hashing, and digital signatures remain unavailable.
 
 ## Start the separate demo on Windows
 
@@ -33,7 +33,7 @@ Use Node.js 20.19+ or 22.12+ as required by this Vite version. This computer had
 5. Use **View sample report**, then **Print / Save PDF**, or **Export JSON**.
 6. Open **Recent sessions** to revisit the last 20 records in this browser tab. Videos are not stored. Clearing the history removes those local records.
 
-No dataset or Python backend is needed for Demo mode. No model inference occurs. Scores are fixed fixtures and do not describe the selected video. Audio analysis, Grad-CAM generation, SHA-256 calculation, digital signatures, and protected audit logging are not implemented.
+No dataset or Python backend is needed for Demo mode. No model inference occurs. Scores are fixed fixtures and do not describe the selected video. Demo audio stays unavailable; the connected app can run the trained audio model. Grad-CAM generation, SHA-256 calculation, digital signatures, and protected audit logging are not implemented.
 
 ## Check the project
 
@@ -102,7 +102,7 @@ Example completed response:
 }
 ```
 
-The numbers above illustrate the API schema, not measured model performance. The backend chooses thresholds and returns the verdict. The frontend validates a completed visual result instead of inventing a missing verdict. Error results should provide error or reason as a readable string. Missing source metadata is filled from the current upload.
+The numbers above illustrate a visual-only API response, not measured model performance. With usable audio, the backend also returns an `audio` score, verdict, threshold, and model version and sets `scope` to `multimodal`. These remain separate channel verdicts; no final combined verdict is calibrated. The frontend validates measured results instead of inventing a missing verdict. Error results should provide error or reason as a readable string. Missing source metadata is filled from the current upload.
 
 Evidence entries can provide id, image_url, caption, kind, and timestamp in seconds. Use absolute HTTP(S) image URLs accessible to the browser; kind may be grad_cam or frame. Grad-CAM images should be described as attribution rather than proof of exact manipulation boundaries. A backend report button appears only when report_available is true in live mode.
 
