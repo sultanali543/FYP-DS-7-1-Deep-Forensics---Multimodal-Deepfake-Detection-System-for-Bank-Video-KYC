@@ -14,11 +14,11 @@ export default function ResultsPage({ result, previewUrl, onNew, onRetry, onRepo
   const complete = result.status === 'complete';
   const finding = findingCopy[result.visual?.verdict];
   const audioAvailable = result.audio?.status === 'complete' && Number.isFinite(result.audio.score);
-  const audioState = audioAvailable ? 'Available' : result.audio?.status === 'insufficient_evidence' ? 'No usable audio' : result.audio?.status === 'unavailable' ? 'Unavailable' : 'Not installed';
-  const audioDescription = audioAvailable ? 'Experimental ASVspoof speech model signal; it does not verify identity.' : result.audio?.reason || 'The audio model has not been trained or installed here.';
+  const audioState = demo ? 'Not run in demo' : audioAvailable ? 'Available' : result.audio?.status === 'insufficient_evidence' ? 'No usable audio' : result.audio?.status === 'unavailable' ? 'Unavailable' : 'Not installed';
+  const audioDescription = demo ? 'Demo mode does not run the audio model or check whether it is installed. Open START_APP.cmd in the project folder to use the trained models.' : audioAvailable ? 'Experimental ASVspoof speech model signal; it does not verify identity.' : result.audio?.reason || 'The audio model has not been trained or installed here.';
   return <>
     <PageHeading eyebrow="03 / SESSION FINDINGS" title="Your analysis, in focus." action={<Button variant="secondary" onClick={onNew} icon="plus">New analysis</Button>}>Session <span className="mono">{result.id}</span> <span className="inline-dot">·</span> {formatDate(result.created_at)}</PageHeading>
-    {demo && <Notice tone="amber">Demo results are fixed examples. No model analyzed this video; the sample score does not describe its content.</Notice>}
+    {demo && <Notice tone="amber">No model analyzed this video. The selected demo scenario determines the label and sample score. To test your video with the trained models, open START_APP.cmd in the project folder and upload it there.</Notice>}
     {!demo && <Notice tone="amber">Experimental baseline: false alarms and missed fakes are possible. Model scores are not proof of manipulation or identity verification.</Notice>}
     {!demo && audioAvailable && <Notice>Visual and audio findings are separate. A combined REAL / SUSPICIOUS / FAKE verdict has not yet been calibrated or evaluated.</Notice>}
     {!demo && audioAvailable && result.audio.verdict !== result.visual?.verdict && <Notice tone="amber">The visual and audio models disagree. Review both signals separately; there is no combined verdict.</Notice>}
