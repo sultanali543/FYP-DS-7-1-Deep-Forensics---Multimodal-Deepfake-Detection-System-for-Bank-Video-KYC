@@ -1,5 +1,7 @@
 # ASVspoof 2019 LA CPU audio baseline
 
+For the channel-robustness experiment, independent evaluation, and selecting a verified model in the connected app, see [the audio robustness guide](ROBUSTNESS.md). The original baseline remains available for comparison and rollback.
+
 This stage trains a separate spoofed-speech detector from the **ASVspoof 2019 Logical Access** training split. The 2021 challenge released new evaluation sets but no new training or development set, so 2019 LA is the correct training source. The downloaded Hugging Face Parquet files are a **community reupload**, not an official archive. The importer verifies their official split totals, label distribution, attack IDs, disjoint speakers, embedded FLAC format, and SHA-256 hashes. That does not prove byte-for-byte equivalence with the Edinburgh original.
 
 The feature extractor streams each Parquet row group directly. It decodes 16 kHz mono FLAC, creates 128-band log-mel frames, takes 40 cepstral coefficients, and summarizes their distribution and change over time. This gives 241 features per utterance. Two scaled logistic models and one histogram gradient boosting model are compared on the validation split. Class weights offset the roughly 9:1 spoof-to-genuine imbalance. Validation balanced accuracy, ROC AUC, and a validation-selected threshold select the artifact. **Validation scores are not held-out test results.** A separate 2019 evaluation or 2021 evaluation set is still needed before making a final benchmark claim.

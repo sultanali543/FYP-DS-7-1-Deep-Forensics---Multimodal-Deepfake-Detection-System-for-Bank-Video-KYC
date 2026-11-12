@@ -1,5 +1,7 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
+
+from audio.active import selected_audio_run
 
 ROOT = Path(__file__).resolve().parents[1]
 MAX_VIDEO_SECONDS = 60
@@ -10,7 +12,7 @@ MAX_VIDEO_FRAMES = 3600
 @dataclass(frozen=True)
 class Settings:
     run: Path = ROOT / "data/runs/cpu_baseline"
-    audio_run: Path = ROOT / "data/runs/audio_baseline"
+    audio_run: Path = field(default_factory=lambda: selected_audio_run(ROOT))
     assets: Path = ROOT / "data/assets"
     temporary: Path = ROOT / "data/backend/temporary"
     frontend: Path = ROOT / "frontend/dist-live"

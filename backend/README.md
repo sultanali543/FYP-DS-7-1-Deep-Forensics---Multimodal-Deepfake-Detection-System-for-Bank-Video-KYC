@@ -18,6 +18,8 @@ The packages have already been installed on the development laptop. On another c
 
 ## What happens after an upload
 
+The audio run can be selected using `python -m audio activate --run data/runs/<run-name>` with the project's Python environment. Restart the app after activation. A checksum-verified local pointer selects that run; an alternative also requires a matching approved release decision. The candidate reported on 12 November did not pass that check. Without a pointer, the original audio baseline is used. An invalid pointer produces an explicit startup error. See [audio model selection and rollback](../audio/ROBUSTNESS.md).
+
 ```text
 React upload page
     -> POST /api/analyses (one MP4)
@@ -44,7 +46,7 @@ Use an MP4 up to **50 MiB**, **60 seconds**, **60 FPS**, and **4K** (at most 384
 
 The visual baseline samples up to 12 frames and requires at least four usable face crops. **Insufficient visual evidence** has no visual verdict or score, though a usable audio track may still yield a separate audio signal. An unreadable video, timeout, or missing visual model is an error, never a fake result or an automatic demo fallback.
 
-**REAL and FAKE are experimental model predictions.** Neither score is a calibrated probability of manipulation, identity fraud, or bank eligibility. False alarms and missed fakes remain possible. The visual model's [baseline report](../ml/experiments/dfdc_sample_cpu_2026-11-06.md) and [external-video diagnostic](../ml/experiments/external_video_44639_2026-11-06.md) describe its limits. The audio model's result was selected on ASVspoof development speech and still needs independent evaluation, especially on compressed banking video audio. Connecting models does not improve their measured accuracy.
+**REAL and FAKE are experimental model predictions.** Neither score is a calibrated probability of manipulation, identity fraud, or bank eligibility. False alarms and missed fakes remain possible. The visual model's [baseline report](../ml/experiments/dfdc_sample_cpu_2026-11-06.md) and [external-video diagnostic](../ml/experiments/external_video_44639_2026-11-06.md) describe its limits. The [audio robustness report](../audio/experiments/asvspoof2019_la_robustness_2026-11-12.md) includes an independent official-data subset; the new candidate was not activated because its genuine false alarms increased. Representative compressed banking-video evaluation is still needed. Connecting models does not improve their measured accuracy.
 
 Audio detection is available when its trained local artifact is present. A missing or unusable audio track yields no audio score. Grad-CAM images, uploaded-video hashing, digital signatures, and protected audit logging remain unavailable. Browser reports are unsigned summaries, not certified forensic reports.
 

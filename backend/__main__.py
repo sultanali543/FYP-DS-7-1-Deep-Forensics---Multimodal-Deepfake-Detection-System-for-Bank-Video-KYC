@@ -16,7 +16,11 @@ def main():
     parser.add_argument("--no-browser", action="store_true")
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
-    settings = Settings()
+    try:
+        settings = Settings()
+    except ValueError as error:
+        print(str(error))
+        return 1
     model = model_readiness(settings)
     if not model["ready"]:
         print(model["reason"])

@@ -24,6 +24,10 @@ def load_model(run):
         raise ValueError("Audio checkpoint feature format is incompatible.")
     if float(model["threshold"]) != float(summary["threshold"]):
         raise ValueError("Audio checkpoint threshold differs from its training summary.")
+    if not np.isfinite(model["threshold"]) or not 0 <= model["threshold"] <= 1:
+        raise ValueError("Invalid audio decision threshold.")
+    if list(model["estimator"].classes_) != [0, 1]:
+        raise ValueError("Audio classifier must map genuine to 0 and spoof to 1.")
     return summary, model
 
 
@@ -45,6 +49,13 @@ def decode_video_audio(video):
 def predict_video_audio(run, video):
     summary, model = load_model(run)
     samples = decode_video_audio(video)
+    return predict_samples(summary, model, samples)
+
+
+def predict_samples(summary, model, samples):
+    """Shared inference for the app and batch evaluation; no threshold fitting."""
+    if samples is not None and (samples.ndim != 1 or not np.isfinite(samples).all() or len(samples) > 60 * SAMPLE_RATE):
+        raise ValueError("Audio inference requires finite mono samples up to 60 seconds.")
     if samples is None or len(samples) < SAMPLE_RATE // 2:
         return {"status": "insufficient_evidence", "score": None,
                 "reason": "No readable audio track of at least half a second."}

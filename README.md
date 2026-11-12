@@ -14,6 +14,8 @@ The [audio CPU baseline](audio/experiments/asvspoof2019_la_cpu_2026-11-09.md) is
 
 ## Run the connected app
 
+The [audio robustness experiment and independent evaluation](audio/experiments/asvspoof2019_la_robustness_2026-11-12.md) tested a new CPU candidate on 1,000 official ASVspoof evaluation clips. Accuracy improved from 84% to 86%, but genuine false alarms increased from 1.6% to 2.4%, so the original audio model remains active. Training, independent evaluation, and verified local model selection are documented in the [audio robustness guide](audio/ROBUSTNESS.md).
+
 Double-click **START_APP.cmd**, wait for **http://127.0.0.1:8000** to open, and confirm **Local model ready**. Choose a short MP4, then click **Start analysis**. Keep the app terminal open; press Ctrl+C there to stop it. The backend deletes its uploaded copy after analysis, leaving your original untouched.
 
 The packages and trained checkpoints are available on the development laptop. For another checkout, run the baseline setup, restore/train the checkpoints, then run **SETUP_APP.cmd** once. GitHub contains the source and experiment reports, not the datasets or model weights.

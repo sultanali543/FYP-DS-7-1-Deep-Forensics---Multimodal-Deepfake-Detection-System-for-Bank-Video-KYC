@@ -1,0 +1,1006 @@
+{
+  "experiment": "audio_channel_robustness",
+  "completed_date": "2026-11-12",
+  "timezone": "Asia/Karachi",
+  "branch": "feature/audio-robustness",
+  "training_data": {
+    "source": "Bisher/ASVspoof_2019_LA community Parquet mirror",
+    "train_clips": 25380,
+    "development_clips": 24844,
+    "byte_equivalence_to_official_training_audio": "unverified"
+  },
+  "development_experiment_1": {
+    "selected": "reference_fixed",
+    "comparison": [
+      {
+        "candidate": "reference_fixed",
+        "threshold": 0.7623000292217216,
+        "passes_clean_guard": true,
+        "worst_class_error": 0.54375,
+        "conditions": {
+          "clean": {
+            "n_clips": 10511,
+            "genuine_clips": 1211,
+            "spoof_clips": 9300,
+            "balanced_accuracy": 0.9580943057812348,
+            "real_flagged_as_fake_rate": 0.07101568951279934,
+            "fake_accepted_as_real_rate": 0.012795698924731183,
+            "roc_auc": 0.9891078198946929,
+            "eer": 0.0495458298926507,
+            "confusion_matrix": [
+              [
+                1125,
+                86
+              ],
+              [
+                119,
+                9181
+              ]
+            ]
+          },
+          "aac32": {
+            "n_clips": 720,
+            "genuine_clips": 400,
+            "spoof_clips": 320,
+            "balanced_accuracy": 0.9234375,
+            "real_flagged_as_fake_rate": 0.125,
+            "fake_accepted_as_real_rate": 0.028125,
+            "roc_auc": 0.9791796875000001,
+            "eer": 0.09,
+            "confusion_matrix": [
+              [
+                350,
+                50
+              ],
+              [
+                9,
+                311
+              ]
+            ]
+          },
+          "aac64_noise": {
+            "n_clips": 720,
+            "genuine_clips": 400,
+            "spoof_clips": 320,
+            "balanced_accuracy": 0.685625,
+            "real_flagged_as_fake_rate": 0.085,
+            "fake_accepted_as_real_rate": 0.54375,
+            "roc_auc": 0.716234375,
+            "eer": 0.35624999999999996,
+            "confusion_matrix": [
+              [
+                366,
+                34
+              ],
+              [
+                174,
+                146
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "candidate": "reference_rethresholded",
+        "threshold": 0.3107745607903993,
+        "passes_clean_guard": false,
+        "worst_class_error": 0.4425,
+        "conditions": {
+          "clean": {
+            "n_clips": 10511,
+            "genuine_clips": 1211,
+            "spoof_clips": 9300,
+            "balanced_accuracy": 0.9323604414728786,
+            "real_flagged_as_fake_rate": 0.1337737407101569,
+            "fake_accepted_as_real_rate": 0.0015053763440860215,
+            "roc_auc": 0.9891078198946929,
+            "eer": 0.0495458298926507,
+            "confusion_matrix": [
+              [
+                1049,
+                162
+              ],
+              [
+                14,
+                9286
+              ]
+            ]
+          },
+          "aac32": {
+            "n_clips": 720,
+            "genuine_clips": 400,
+            "spoof_clips": 320,
+            "balanced_accuracy": 0.894375,
+            "real_flagged_as_fake_rate": 0.205,
+            "fake_accepted_as_real_rate": 0.00625,
+            "roc_auc": 0.9791796875000001,
+            "eer": 0.09,
+            "confusion_matrix": [
+              [
+                318,
+                82
+              ],
+              [
+                2,
+                318
+              ]
+            ]
+          },
+          "aac64_noise": {
+            "n_clips": 720,
+            "genuine_clips": 400,
+            "spoof_clips": 320,
+            "balanced_accuracy": 0.631875,
+            "real_flagged_as_fake_rate": 0.4425,
+            "fake_accepted_as_real_rate": 0.29375,
+            "roc_auc": 0.716234375,
+            "eer": 0.35624999999999996,
+            "confusion_matrix": [
+              [
+                223,
+                177
+              ],
+              [
+                94,
+                226
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "candidate": "clean_histgb200_l15",
+        "threshold": 0.3437766406331009,
+        "passes_clean_guard": false,
+        "worst_class_error": 0.4175,
+        "conditions": {
+          "clean": {
+            "n_clips": 10511,
+            "genuine_clips": 1211,
+            "spoof_clips": 9300,
+            "balanced_accuracy": 0.9389837777363417,
+            "real_flagged_as_fake_rate": 0.12138728323699421,
+            "fake_accepted_as_real_rate": 0.0006451612903225806,
+            "roc_auc": 0.9922724487893236,
+            "eer": 0.04459124690338563,
+            "confusion_matrix": [
+              [
+                1064,
+                147
+              ],
+              [
+                6,
+                9294
+              ]
+            ]
+          },
+          "aac32": {
+            "n_clips": 720,
+            "genuine_clips": 400,
+            "spoof_clips": 320,
+            "balanced_accuracy": 0.9021874999999999,
+            "real_flagged_as_fake_rate": 0.1925,
+            "fake_accepted_as_real_rate": 0.003125,
+            "roc_auc": 0.9830390625000001,
+            "eer": 0.0725,
+            "confusion_matrix": [
+              [
+                323,
+                77
+              ],
+              [
+                1,
+                319
+              ]
+            ]
+          },
+          "aac64_noise": {
+            "n_clips": 720,
+            "genuine_clips": 400,
+            "spoof_clips": 320,
+            "balanced_accuracy": 0.64125,
+            "real_flagged_as_fake_rate": 0.4175,
+            "fake_accepted_as_real_rate": 0.3,
+            "roc_auc": 0.7245234375,
+            "eer": 0.3375,
+            "confusion_matrix": [
+              [
+                233,
+                167
+              ],
+              [
+                96,
+                224
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "candidate": "aug_histgb200_l15",
+        "threshold": 0.5285993615405015,
+        "passes_clean_guard": false,
+        "worst_class_error": 0.3575,
+        "conditions": {
+          "clean": {
+            "n_clips": 10511,
+            "genuine_clips": 1211,
+            "spoof_clips": 9300,
+            "balanced_accuracy": 0.9383923798868792,
+            "real_flagged_as_fake_rate": 0.12138728323699421,
+            "fake_accepted_as_real_rate": 0.0018279569892473118,
+            "roc_auc": 0.9860647469877378,
+            "eer": 0.0611065235342692,
+            "confusion_matrix": [
+              [
+                1064,
+                147
+              ],
+              [
+                17,
+                9283
+              ]
+            ]
+          },
+          "aac32": {
+            "n_clips": 720,
+            "genuine_clips": 400,
+            "spoof_clips": 320,
+            "balanced_accuracy": 0.9199999999999999,
+            "real_flagged_as_fake_rate": 0.16,
+            "fake_accepted_as_real_rate": 0.0,
+            "roc_auc": 0.9791875,
+            "eer": 0.0875,
+            "confusion_matrix": [
+              [
+                336,
+                64
+              ],
+              [
+                0,
+                320
+              ]
+            ]
+          },
+          "aac64_noise": {
+            "n_clips": 720,
+            "genuine_clips": 400,
+            "spoof_clips": 320,
+            "balanced_accuracy": 0.755625,
+            "real_flagged_as_fake_rate": 0.3575,
+            "fake_accepted_as_real_rate": 0.13125,
+            "roc_auc": 0.8698359375,
+            "eer": 0.20937499999999998,
+            "confusion_matrix": [
+              [
+                257,
+                143
+              ],
+              [
+                42,
+                278
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "candidate": "aug_histgb200_l31",
+        "threshold": 0.6117851814875513,
+        "passes_clean_guard": false,
+        "worst_class_error": 0.3075,
+        "conditions": {
+          "clean": {
+            "n_clips": 10511,
+            "genuine_clips": 1211,
+            "spoof_clips": 9300,
+            "balanced_accuracy": 0.9431491347238131,
+            "real_flagged_as_fake_rate": 0.11230388109000826,
+            "fake_accepted_as_real_rate": 0.0013978494623655914,
+            "roc_auc": 0.9879148131376362,
+            "eer": 0.057803468208092484,
+            "confusion_matrix": [
+              [
+                1075,
+                136
+              ],
+              [
+                13,
+                9287
+              ]
+            ]
+          },
+          "aac32": {
+            "n_clips": 720,
+            "genuine_clips": 400,
+            "spoof_clips": 320,
+            "balanced_accuracy": 0.9237500000000001,
+            "real_flagged_as_fake_rate": 0.1525,
+            "fake_accepted_as_real_rate": 0.0,
+            "roc_auc": 0.98165625,
+            "eer": 0.0875,
+            "confusion_matrix": [
+              [
+                339,
+                61
+              ],
+              [
+                0,
+                320
+              ]
+            ]
+          },
+          "aac64_noise": {
+            "n_clips": 720,
+            "genuine_clips": 400,
+            "spoof_clips": 320,
+            "balanced_accuracy": 0.7775000000000001,
+            "real_flagged_as_fake_rate": 0.3075,
+            "fake_accepted_as_real_rate": 0.1375,
+            "roc_auc": 0.8806328125,
+            "eer": 0.215,
+            "confusion_matrix": [
+              [
+                277,
+                123
+              ],
+              [
+                44,
+                276
+              ]
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "development_experiment_2": {
+    "selected": "blend_aug31_0.5",
+    "model_version": "audio-robust-5c5428f0d846",
+    "checkpoint_sha256": "5c5428f0d8462863257e2820fd55a44b18c7409827ea2144a02fffd9d00a1470",
+    "checkpoint_bytes": 1919618,
+    "threshold": 0.7316751108360287,
+    "comparison": [
+      {
+        "candidate": "reference_fixed",
+        "threshold": 0.7623000292217216,
+        "passes_clean_guard": true,
+        "worst_class_error": 0.54375,
+        "conditions": {
+          "clean": {
+            "n_clips": 10511,
+            "genuine_clips": 1211,
+            "spoof_clips": 9300,
+            "balanced_accuracy": 0.9580943057812348,
+            "real_flagged_as_fake_rate": 0.07101568951279934,
+            "fake_accepted_as_real_rate": 0.012795698924731183,
+            "roc_auc": 0.9891078198946929,
+            "eer": 0.0495458298926507,
+            "confusion_matrix": [
+              [
+                1125,
+                86
+              ],
+              [
+                119,
+                9181
+              ]
+            ]
+          },
+          "aac32": {
+            "n_clips": 720,
+            "genuine_clips": 400,
+            "spoof_clips": 320,
+            "balanced_accuracy": 0.9234375,
+            "real_flagged_as_fake_rate": 0.125,
+            "fake_accepted_as_real_rate": 0.028125,
+            "roc_auc": 0.9791796875000001,
+            "eer": 0.09,
+            "confusion_matrix": [
+              [
+                350,
+                50
+              ],
+              [
+                9,
+                311
+              ]
+            ]
+          },
+          "aac64_noise": {
+            "n_clips": 720,
+            "genuine_clips": 400,
+            "spoof_clips": 320,
+            "balanced_accuracy": 0.685625,
+            "real_flagged_as_fake_rate": 0.085,
+            "fake_accepted_as_real_rate": 0.54375,
+            "roc_auc": 0.716234375,
+            "eer": 0.35624999999999996,
+            "confusion_matrix": [
+              [
+                366,
+                34
+              ],
+              [
+                174,
+                146
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "candidate": "reference_rethresholded",
+        "threshold": 0.7101388081752386,
+        "passes_clean_guard": true,
+        "worst_class_error": 0.50625,
+        "conditions": {
+          "clean": {
+            "n_clips": 10511,
+            "genuine_clips": 1211,
+            "spoof_clips": 9300,
+            "balanced_accuracy": 0.9573739822238796,
+            "real_flagged_as_fake_rate": 0.07514450867052024,
+            "fake_accepted_as_real_rate": 0.01010752688172043,
+            "roc_auc": 0.9891078198946929,
+            "eer": 0.0495458298926507,
+            "confusion_matrix": [
+              [
+                1120,
+                91
+              ],
+              [
+                94,
+                9206
+              ]
+            ]
+          },
+          "aac32": {
+            "n_clips": 720,
+            "genuine_clips": 400,
+            "spoof_clips": 320,
+            "balanced_accuracy": 0.9203125000000001,
+            "real_flagged_as_fake_rate": 0.1375,
+            "fake_accepted_as_real_rate": 0.021875,
+            "roc_auc": 0.9791796875000001,
+            "eer": 0.09,
+            "confusion_matrix": [
+              [
+                345,
+                55
+              ],
+              [
+                7,
+                313
+              ]
+            ]
+          },
+          "aac64_noise": {
+            "n_clips": 720,
+            "genuine_clips": 400,
+            "spoof_clips": 320,
+            "balanced_accuracy": 0.690625,
+            "real_flagged_as_fake_rate": 0.1125,
+            "fake_accepted_as_real_rate": 0.50625,
+            "roc_auc": 0.716234375,
+            "eer": 0.35624999999999996,
+            "confusion_matrix": [
+              [
+                355,
+                45
+              ],
+              [
+                162,
+                158
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "candidate": "aug_histgb200_l31",
+        "threshold": 0.8504145352858639,
+        "passes_clean_guard": false,
+        "worst_class_error": 0.284375,
+        "conditions": {
+          "clean": {
+            "n_clips": 10511,
+            "genuine_clips": 1211,
+            "spoof_clips": 9300,
+            "balanced_accuracy": 0.95376348525612,
+            "real_flagged_as_fake_rate": 0.08505367464905036,
+            "fake_accepted_as_real_rate": 0.007419354838709678,
+            "roc_auc": 0.9879148131376362,
+            "eer": 0.057803468208092484,
+            "confusion_matrix": [
+              [
+                1108,
+                103
+              ],
+              [
+                69,
+                9231
+              ]
+            ]
+          },
+          "aac32": {
+            "n_clips": 720,
+            "genuine_clips": 400,
+            "spoof_clips": 320,
+            "balanced_accuracy": 0.9290625,
+            "real_flagged_as_fake_rate": 0.12,
+            "fake_accepted_as_real_rate": 0.021875,
+            "roc_auc": 0.98165625,
+            "eer": 0.0875,
+            "confusion_matrix": [
+              [
+                352,
+                48
+              ],
+              [
+                7,
+                313
+              ]
+            ]
+          },
+          "aac64_noise": {
+            "n_clips": 720,
+            "genuine_clips": 400,
+            "spoof_clips": 320,
+            "balanced_accuracy": 0.7853125,
+            "real_flagged_as_fake_rate": 0.145,
+            "fake_accepted_as_real_rate": 0.284375,
+            "roc_auc": 0.8806328125,
+            "eer": 0.215,
+            "confusion_matrix": [
+              [
+                342,
+                58
+              ],
+              [
+                91,
+                229
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "candidate": "blend_aug31_0.25",
+        "threshold": 0.6994271081931678,
+        "passes_clean_guard": true,
+        "worst_class_error": 0.478125,
+        "conditions": {
+          "clean": {
+            "n_clips": 10511,
+            "genuine_clips": 1211,
+            "spoof_clips": 9300,
+            "balanced_accuracy": 0.9565095939550536,
+            "real_flagged_as_fake_rate": 0.08009909165978531,
+            "fake_accepted_as_real_rate": 0.006881720430107527,
+            "roc_auc": 0.9891903074860374,
+            "eer": 0.0495458298926507,
+            "confusion_matrix": [
+              [
+                1114,
+                97
+              ],
+              [
+                64,
+                9236
+              ]
+            ]
+          },
+          "aac32": {
+            "n_clips": 720,
+            "genuine_clips": 400,
+            "spoof_clips": 320,
+            "balanced_accuracy": 0.923125,
+            "real_flagged_as_fake_rate": 0.135,
+            "fake_accepted_as_real_rate": 0.01875,
+            "roc_auc": 0.980328125,
+            "eer": 0.09,
+            "confusion_matrix": [
+              [
+                346,
+                54
+              ],
+              [
+                6,
+                314
+              ]
+            ]
+          },
+          "aac64_noise": {
+            "n_clips": 720,
+            "genuine_clips": 400,
+            "spoof_clips": 320,
+            "balanced_accuracy": 0.7096875,
+            "real_flagged_as_fake_rate": 0.1025,
+            "fake_accepted_as_real_rate": 0.478125,
+            "roc_auc": 0.7846953124999999,
+            "eer": 0.303125,
+            "confusion_matrix": [
+              [
+                359,
+                41
+              ],
+              [
+                153,
+                167
+              ]
+            ]
+          }
+        }
+      },
+      {
+        "candidate": "blend_aug31_0.5",
+        "threshold": 0.7316751108360287,
+        "passes_clean_guard": true,
+        "worst_class_error": 0.4625,
+        "conditions": {
+          "clean": {
+            "n_clips": 10511,
+            "genuine_clips": 1211,
+            "spoof_clips": 9300,
+            "balanced_accuracy": 0.956741873329604,
+            "real_flagged_as_fake_rate": 0.08092485549132948,
+            "fake_accepted_as_real_rate": 0.005591397849462366,
+            "roc_auc": 0.9891528373422835,
+            "eer": 0.05119735755573906,
+            "confusion_matrix": [
+              [
+                1113,
+                98
+              ],
+              [
+                52,
+                9248
+              ]
+            ]
+          },
+          "aac32": {
+            "n_clips": 720,
+            "genuine_clips": 400,
+            "spoof_clips": 320,
+            "balanced_accuracy": 0.92875,
+            "real_flagged_as_fake_rate": 0.13,
+            "fake_accepted_as_real_rate": 0.0125,
+            "roc_auc": 0.9809296875,
+            "eer": 0.085,
+            "confusion_matrix": [
+              [
+                348,
+                52
+              ],
+              [
+                4,
+                316
+              ]
+            ]
+          },
+          "aac64_noise": {
+            "n_clips": 720,
+            "genuine_clips": 400,
+            "spoof_clips": 320,
+            "balanced_accuracy": 0.7175,
+            "real_flagged_as_fake_rate": 0.1025,
+            "fake_accepted_as_real_rate": 0.4625,
+            "roc_auc": 0.8411015625,
+            "eer": 0.24375000000000002,
+            "confusion_matrix": [
+              [
+                359,
+                41
+              ],
+              [
+                148,
+                172
+              ]
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "official_test_subset": {
+    "source": "https://doi.org/10.7488/ds/2555",
+    "archive_url": "https://datashare.ed.ac.uk/server/api/core/bitstreams/a9f87c35-f055-4015-80e2-2fdff0d46269/content",
+    "archive_bytes": 7640952520,
+    "archive_etag": "\"30c98f11d8b2bc21f2c257bfd78bb5c5\"",
+    "license_url": "https://datashare.ed.ac.uk/server/api/core/bitstreams/60c7de6d-37d3-45c1-b52e-9f18b0338e47/content",
+    "protocol_sha256": "84fce576efff092269a0a6ad247d2e9f2f7b4d4e25a4545efb2518da92708036",
+    "seed": 20261112,
+    "per_class": 500,
+    "selection": "round-robin speaker/attack strata; fixed before any model scoring",
+    "expected_audio_bytes": 59930304
+  },
+  "independent_test": {
+    "reference": {
+      "purpose": "test",
+      "model_version": "audio-asv19la-095854128b36",
+      "checkpoint_sha256": "095854128b36c6d7eec03f8fc853e698df974caaf2297493659c389bba5189eb",
+      "threshold": 0.7623000292217216,
+      "manifest_sha256": "9b543e90585ec27664c0b514ca148468b27969e92c53bc56f503623c6a31f71f",
+      "requested": 1000,
+      "scored": 1000,
+      "coverage": 1.0,
+      "coverage_by_class": {
+        "genuine": {
+          "requested": 500,
+          "scored": 500,
+          "coverage": 1.0
+        },
+        "spoof": {
+          "requested": 500,
+          "scored": 500,
+          "coverage": 1.0
+        }
+      },
+      "metrics_on_scored_clips": {
+        "threshold": 0.7623000292217216,
+        "accuracy": 0.84,
+        "balanced_accuracy": 0.84,
+        "fake_precision": 0.9775280898876404,
+        "fake_recall": 0.696,
+        "fake_f1": 0.8130841121495327,
+        "roc_auc": 0.94756,
+        "log_loss": 0.33650978733718145,
+        "fake_accepted_as_real_rate": 0.304,
+        "real_flagged_as_fake_rate": 0.016,
+        "confusion_matrix": [
+          [
+            492,
+            8
+          ],
+          [
+            152,
+            348
+          ]
+        ],
+        "majority_class_accuracy": 0.5,
+        "majority_class_balanced_accuracy": 0.5,
+        "n_clips": 1000,
+        "genuine_clips": 500,
+        "spoof_clips": 500,
+        "eer": 0.118,
+        "eer_method": "linear interpolation of tie-aware ROC; descriptive, not a deployment threshold"
+      },
+      "attacks": {
+        "A07": {
+          "requested": 39,
+          "scored": 39,
+          "missed_spoof_rate": 0.02564102564102564
+        },
+        "A08": {
+          "requested": 39,
+          "scored": 39,
+          "missed_spoof_rate": 0.0
+        },
+        "A09": {
+          "requested": 39,
+          "scored": 39,
+          "missed_spoof_rate": 0.02564102564102564
+        },
+        "A10": {
+          "requested": 39,
+          "scored": 39,
+          "missed_spoof_rate": 0.5641025641025641
+        },
+        "A11": {
+          "requested": 39,
+          "scored": 39,
+          "missed_spoof_rate": 0.46153846153846156
+        },
+        "A12": {
+          "requested": 39,
+          "scored": 39,
+          "missed_spoof_rate": 0.2564102564102564
+        },
+        "A13": {
+          "requested": 38,
+          "scored": 38,
+          "missed_spoof_rate": 0.3684210526315789
+        },
+        "A14": {
+          "requested": 38,
+          "scored": 38,
+          "missed_spoof_rate": 0.02631578947368421
+        },
+        "A15": {
+          "requested": 38,
+          "scored": 38,
+          "missed_spoof_rate": 0.13157894736842105
+        },
+        "A16": {
+          "requested": 38,
+          "scored": 38,
+          "missed_spoof_rate": 0.05263157894736842
+        },
+        "A17": {
+          "requested": 38,
+          "scored": 38,
+          "missed_spoof_rate": 0.9736842105263158
+        },
+        "A18": {
+          "requested": 38,
+          "scored": 38,
+          "missed_spoof_rate": 0.8947368421052632
+        },
+        "A19": {
+          "requested": 38,
+          "scored": 38,
+          "missed_spoof_rate": 0.18421052631578946
+        }
+      },
+      "elapsed_seconds": 30.279715000011493,
+      "median_inference_seconds": 0.027830050006741658,
+      "note": "Fixed saved threshold; no fitting or model selection. Labels/provenance are supplied by the manifest. Unscored clips are never counted as REAL. EER uses local tie-aware ROC interpolation, not the official discrete challenge convention."
+    },
+    "candidate": {
+      "purpose": "test",
+      "model_version": "audio-robust-5c5428f0d846",
+      "checkpoint_sha256": "5c5428f0d8462863257e2820fd55a44b18c7409827ea2144a02fffd9d00a1470",
+      "threshold": 0.7316751108360287,
+      "manifest_sha256": "9b543e90585ec27664c0b514ca148468b27969e92c53bc56f503623c6a31f71f",
+      "requested": 1000,
+      "scored": 1000,
+      "coverage": 1.0,
+      "coverage_by_class": {
+        "genuine": {
+          "requested": 500,
+          "scored": 500,
+          "coverage": 1.0
+        },
+        "spoof": {
+          "requested": 500,
+          "scored": 500,
+          "coverage": 1.0
+        }
+      },
+      "metrics_on_scored_clips": {
+        "threshold": 0.7316751108360287,
+        "accuracy": 0.86,
+        "balanced_accuracy": 0.86,
+        "fake_precision": 0.96875,
+        "fake_recall": 0.744,
+        "fake_f1": 0.8416289592760181,
+        "roc_auc": 0.954744,
+        "log_loss": 0.2988677037361309,
+        "fake_accepted_as_real_rate": 0.256,
+        "real_flagged_as_fake_rate": 0.024,
+        "confusion_matrix": [
+          [
+            488,
+            12
+          ],
+          [
+            128,
+            372
+          ]
+        ],
+        "majority_class_accuracy": 0.5,
+        "majority_class_balanced_accuracy": 0.5,
+        "n_clips": 1000,
+        "genuine_clips": 500,
+        "spoof_clips": 500,
+        "eer": 0.09599999999999997,
+        "eer_method": "linear interpolation of tie-aware ROC; descriptive, not a deployment threshold"
+      },
+      "attacks": {
+        "A07": {
+          "requested": 39,
+          "scored": 39,
+          "missed_spoof_rate": 0.0
+        },
+        "A08": {
+          "requested": 39,
+          "scored": 39,
+          "missed_spoof_rate": 0.0
+        },
+        "A09": {
+          "requested": 39,
+          "scored": 39,
+          "missed_spoof_rate": 0.02564102564102564
+        },
+        "A10": {
+          "requested": 39,
+          "scored": 39,
+          "missed_spoof_rate": 0.38461538461538464
+        },
+        "A11": {
+          "requested": 39,
+          "scored": 39,
+          "missed_spoof_rate": 0.358974358974359
+        },
+        "A12": {
+          "requested": 39,
+          "scored": 39,
+          "missed_spoof_rate": 0.3076923076923077
+        },
+        "A13": {
+          "requested": 38,
+          "scored": 38,
+          "missed_spoof_rate": 0.15789473684210525
+        },
+        "A14": {
+          "requested": 38,
+          "scored": 38,
+          "missed_spoof_rate": 0.0
+        },
+        "A15": {
+          "requested": 38,
+          "scored": 38,
+          "missed_spoof_rate": 0.10526315789473684
+        },
+        "A16": {
+          "requested": 38,
+          "scored": 38,
+          "missed_spoof_rate": 0.05263157894736842
+        },
+        "A17": {
+          "requested": 38,
+          "scored": 38,
+          "missed_spoof_rate": 0.9736842105263158
+        },
+        "A18": {
+          "requested": 38,
+          "scored": 38,
+          "missed_spoof_rate": 0.7894736842105263
+        },
+        "A19": {
+          "requested": 38,
+          "scored": 38,
+          "missed_spoof_rate": 0.18421052631578946
+        }
+      },
+      "elapsed_seconds": 30.22766140004387,
+      "median_inference_seconds": 0.028053749992977828,
+      "note": "Fixed saved threshold; no fitting or model selection. Labels/provenance are supplied by the manifest. Unscored clips are never counted as REAL. EER uses local tie-aware ROC interpolation, not the official discrete challenge convention."
+    },
+    "paired_speaker_bootstrap": {
+      "method": "paired speaker bootstrap of candidate minus reference error rate",
+      "speakers": 67,
+      "repeats": 500,
+      "valid_repeats": 500,
+      "intervals_95": {
+        "genuine_false_alarm_rate": [
+          0.0,
+          0.01803607214428858
+        ],
+        "missed_spoof_rate": [
+          -0.06475586502313475,
+          -0.030414679934973488
+        ]
+      }
+    }
+  },
+  "release": {
+    "approved": false,
+    "active_model": "audio-asv19la-095854128b36",
+    "reason": "Candidate improves aggregate accuracy and EER but increases genuine false alarms; retain the reference under the declared release rule.",
+    "no_test_retuning": true
+  },
+  "code_sha256": {
+    "audio/active.py": "a31a3b6aa83baf9a20c0353d4517a08f75e051f1a873deb87469d5771c085522",
+    "audio/augmentation.py": "2fd1d0fb321dbc038d1f2e9f6869f9a246d4ed284b100a09a97b5b7cc813104b",
+    "audio/dataset.py": "5747f1ae5ca30e758ad6018e8163ade6da06d04778c2975003bf239612531fba",
+    "audio/ensemble.py": "b6b8fb78a98fe85a8d774134ca0f030f726bfc81a8172afc930e5f8d2e092120",
+    "audio/evaluate.py": "879cd4e148572eb5af9c3d575baa9549f2100a50f3fd96a8a4469dd04cc08675",
+    "audio/features.py": "b25e6ebd2f7efde321ac513bba006b4217fdf9f01bf4109a64db95583f4dd471",
+    "audio/metrics.py": "873210fe4fbc1b13e06d80c62ffb15fe7a42289fb1ac9eade29744973002c90d",
+    "audio/official_eval.py": "03f04e092b40ca4afec89bfc85ed7f8fd26cc042ba38b1b3372ef5e6a9e202d2",
+    "audio/predict.py": "04b8524cbfd921e7dd7fe15d3eeb5983fa2c60d94a854a0ba1058a5fdd8959c5",
+    "audio/robustness.py": "90cfe86f0fb119b07f3e0d5eeab8cd2f37c5129160265731c450b0a50c30d9fb",
+    "audio/train.py": "984fd5ffe8515ad047065ee0dfde1433cdcb1a00cb05acc289f9f1e9e5a128bb",
+    "audio/__init__.py": "8cc1ed873d1908b0712e96f12b40a53e2de00695ec6d7941014d2e7b19db8b7c",
+    "audio/__main__.py": "9fc4907db4b7dacddd03acaf82d711bd8d58a3439422ccf18a115c2d739ba30f"
+  },
+  "limitations": [
+    "Balanced 1000-clip subset, not full ASVspoof challenge benchmark or KYC validation.",
+    "Local ROC-interpolated EER, not official discrete DET EER; no t-DCF claim.",
+    "Training mirror is structurally audited, not byte-verified against official archive.",
+    "No pretrained neural speech backbone or speech-activity model was implemented.",
+    "Private interview diagnostic still receives FAKE from both models; personal data and results remain local."
+  ]
+}
