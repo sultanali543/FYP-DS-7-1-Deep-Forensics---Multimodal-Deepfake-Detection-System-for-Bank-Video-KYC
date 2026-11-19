@@ -53,7 +53,7 @@ Contains information from [ASVspoof 2019, University of Edinburgh/CSTR](https://
 
 ## Select or restore the app's audio model
 
-The candidate in this report failed its release check, so it cannot be activated in the connected app. After a future candidate passes an independently recorded release decision, select that verified local run and restart `START_APP.cmd`:
+The candidate in this report failed its release check, so it cannot be activated in the connected app. After a future candidate passes an independently recorded release decision, select that verified local run and restart the Python backend:
 
 ```powershell
 .\.venv\Scripts\python.exe -m audio activate --run data/runs/audio_approved_candidate

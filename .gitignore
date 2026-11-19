@@ -52,6 +52,7 @@ checkpoints/
 
 # Local academic references and QA screenshots
 /*.docx
+/docs/local-references/
 /frontend-preview.jpg
 
 # Editor and operating-system files

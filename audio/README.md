@@ -20,7 +20,7 @@ From the project root, with the existing `.venv`:
 
 `data/runs/audio_baseline/` contains the ignored feature cache, audit, checkpoint, and training summary. The command resumes feature extraction after interruption. It refuses to overwrite a finished model; choose a new `--output` directory for a different experiment. For a short pipeline check, add `--max-groups 1`; this extracts only one row group per split and does **not** train a model.
 
-After training, `START_APP.cmd` uses the checkpoint automatically. An MP4 with a usable audio track shows separate visual and audio scores. There is no unvalidated fused fraud score. If speech is missing or too quiet, the audio field reports insufficient evidence without inventing a score. The uploaded backend copy is still deleted after analysis. The original video and Parquet downloads stay untouched.
+After training, the connected app uses the checkpoint automatically. An MP4 with a usable audio track shows separate visual and audio scores. There is no unvalidated fused fraud score. If speech is missing or too quiet, the audio field reports insufficient evidence without inventing a score. The uploaded backend copy is still deleted after analysis. The original video and Parquet downloads stay untouched.
 
 To inspect the audio score alone:
 

@@ -27,10 +27,11 @@ The user wants development work committed on separate feature branches.
 
 - The frontend is a React, JavaScript/JSX, CSS, and Vite application under frontend/.
 - Run npm test and npm run build from frontend/ for relevant application changes.
-- START_APP.cmd runs the connected local app (Python FastAPI plus the live React build). START_FRONTEND.cmd defaults to the separate demo. Preserve explicit demo/live distinctions and never fall back to mock predictions after API failures.
+- The root README.txt gives terminal commands for the connected local app (Python FastAPI plus the live React build) and the separate demo. Preserve explicit demo/live distinctions and never fall back to mock predictions after API failures.
 - The backend lives under backend/. Run .venv/Scripts/python.exe -m pytest backend/tests -q for backend changes. Run npm run build:live from frontend/ for connected-app changes. Uploaded copies are deleted after analysis; preserve the original user file and scoped cleanup safeguards.
 - The Python CPU visual baseline lives under ml/. Run .venv/Scripts/python.exe -m pytest ml/tests -q for relevant model pipeline changes.
 - The first DFDC sample CPU experiment is trained locally under data/runs/cpu_baseline/. Its measured results and provenance are recorded in ml/experiments/dfdc_sample_cpu_2026-11-06.md and the accompanying JSON. Checkpoint weights are excluded from Git.
 - Distinguish a verified training pipeline from an actually trained and evaluated checkpoint. Never invent accuracy results or treat ImageNet weights as a deepfake classifier.
 - Preserve source-group train/validation/test separation. Select models and thresholds using validation only; do not tune against held-out test results.
-- Frontend integration with trained visual inference is implemented. Audio analysis, Grad-CAM generation, uploaded-video hashing, and digital signing remain later milestones. Integration must preserve the trained checkpoint and validation-selected threshold.
+- Frontend integration with trained visual and audio inference is implemented. Grad-CAM generation, uploaded-video hashing, calibrated fusion, and digital signing remain later milestones. Integration must preserve each checkpoint's validation-selected threshold.
+- Audio changes require `.venv/Scripts/python.exe -m pytest audio/tests -q`; shared inference/model activation also requires backend tests. Keep the original `data/runs/audio_baseline/` checkpoint intact. An optional ignored `data/runs/audio_active.json` selects a verified alternative run for the backend. Never relabel development results as independent test performance or select models/thresholds using final test scores.

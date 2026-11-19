@@ -4,7 +4,7 @@ The React frontend sends real videos to a Python FastAPI backend. It runs the tr
 
 ## Run it on Windows
 
-1. Double-click **START_APP.cmd** in the project folder.
+1. From the project folder in PowerShell, run `cd frontend; npm run build:live; cd ..`, then `.\.venv\Scripts\python.exe -m backend`.
 2. Wait for the browser to open at **http://127.0.0.1:8000**. Keep the app's terminal window open.
 3. Confirm the page says **Local model ready**. The audio card shows a score only for a video with usable audio and a valid local audio checkpoint.
 4. Click **Choose video**, select an MP4, and wait for the preview.
@@ -12,9 +12,9 @@ The React frontend sends real videos to a Python FastAPI backend. It runs the tr
 6. Use **View summary** to print/save an unsigned PDF, or **Export JSON** for the full prediction, including frame scores.
 7. Press **Ctrl+C** in the app's terminal to stop it. An active prediction may finish before shutdown.
 
-The packages have already been installed on the development laptop. On another checkout, first run **SETUP_BASELINE.cmd**, restore or train the visual baseline, and run **SETUP_APP.cmd** once. `SETUP_APP.cmd` also installs the audio decoder dependencies. The local visual checkpoint, its training summary, and `data/assets/` detector files are required. The audio checkpoint under `data/runs/audio_baseline/` is optional; train or restore it using [audio instructions](../audio/README.md). GitHub does not contain model weights. Setup does not retrain a model.
+The packages have already been installed on the development laptop. On another checkout, follow the setup commands in the root `README.txt`, restore or train the visual baseline, and install the audio and frontend dependencies. The local visual checkpoint, its training summary, and `data/assets/` detector files are required. The audio checkpoint under `data/runs/audio_baseline/` is optional; train or restore it using [audio instructions](../audio/README.md). GitHub does not contain model weights. Setup does not retrain a model.
 
-**START_FRONTEND.cmd** remains the separate frontend demonstration/development launcher. Its default demo scores are fixed examples. **START_APP.cmd** builds a separate live frontend in `frontend/dist-live/`, overriding demo configuration for that build, then serves both UI and API from one local address. It needs no `.env.local` edits. Reopening it rebuilds the frontend from the current source.
+For the separate frontend demo, follow the demo commands in the root `README.txt`; its scores are fixed examples. The `npm run build:live` command builds a separate live frontend in `frontend/dist-live/`, overriding demo configuration for that build. The Python backend then serves both UI and API from one local address. It needs no `.env.local` edits. Rebuild after frontend source changes.
 
 ## What happens after an upload
 
@@ -34,7 +34,7 @@ React upload page
 
 - **React / JavaScript / CSS:** the existing interface, preview, polling, history, and reports.
 - **Python / FastAPI / Uvicorn:** file uploads, job status, local HTTP service, and serving the built frontend. See the official [FastAPI upload documentation](https://fastapi.tiangolo.com/tutorial/request-files/) and [Uvicorn settings](https://uvicorn.dev/settings/).
-- **OpenCV and PyTorch:** the existing face detector and frozen ResNet18 encoder with trained logistic classifier. The worker calls the same `ml/predict.py` function as **PREDICT_VIDEO.cmd**. Its checkpoint and threshold are unchanged.
+- **OpenCV and PyTorch:** the existing face detector and frozen ResNet18 encoder with trained logistic classifier. The worker calls the same `ml/predict.py` function as `python -m ml predict`. Its checkpoint and threshold are unchanged.
 - **SoundFile, FFmpeg, NumPy, scikit-learn:** extract the MP4 speech and score it with the CPU log-mel audio classifier. The audio checkpoint and its validation-selected threshold are separate from the visual model.
 - **A Python subprocess per video:** isolates decoding and prediction, with a 180-second timeout. Only one worker runs inference at a time, limiting memory use on this CPU laptop. This adds model-loading time to each request.
 
@@ -95,9 +95,9 @@ npm run build:live
 
 ## Troubleshooting
 
-- **Package missing:** run SETUP_APP.cmd. If the baseline packages/checkpoint are missing, follow `ml/README.md` first.
+- **Package missing:** follow the setup commands in the root `README.txt`. If the baseline packages/checkpoint are missing, follow `ml/README.md` first.
 - **Model unavailable:** restore the checkpoint, training summary, and verified face detector; the backend checks their hashes. Restart after restoring them.
-- **Port 8000 in use:** close the previous app terminal gracefully, then run START_APP.cmd again. Do not stop unrelated programs blindly.
+- **Port 8000 in use:** close the previous app terminal gracefully, then run `.\.venv\Scripts\python.exe -m backend` again. Do not stop unrelated programs blindly.
 - **Browser did not open:** open http://127.0.0.1:8000 manually while the app terminal is running.
 - **Video preview fails:** use a browser-compatible H.264 MP4.
 - **Insufficient evidence:** use a clear face, sufficient lighting, and one prominent subject. It is not a REAL verdict.

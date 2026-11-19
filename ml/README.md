@@ -43,13 +43,13 @@ The workflow keeps a single archive, small face images, cached vectors, and a mo
 
 Open the project folder. Python 3.13.3 on Windows 11 was used to verify this setup. The pinned CPU PyTorch wheels need a supported 64-bit Python version.
 
-1. Double-click **SETUP_BASELINE.cmd** once. It creates `.venv`, installs the tested packages, and downloads the small pretrained assets. This step does not train a deepfake classifier.
-2. Double-click **TRAIN_BASELINE.cmd**. Paste the full path to your DFDC training ZIP when asked, then press Enter.
+1. Follow the one-time setup commands in the root `README.txt`. They create `.venv`, install the tested packages, and download the small pretrained assets. This step does not train a deepfake classifier.
+2. From the project root, run `.\.venv\Scripts\python.exe -m ml run --source "C:\path\to\train_sample_videos.zip"` with your DFDC training ZIP path.
 3. Keep the laptop plugged in. The program prints progress, reuses valid crop/feature caches, compares both encoders on validation videos, saves the selected model, and evaluates the held-out test split.
 4. Read the report in `data/runs/cpu_baseline/test_metrics.json` and the matching `test_evaluation.png`. Check balanced accuracy, AUC, fake recall, false alarms on real clips, and how many videos were analyzable.
-5. Double-click **PREDICT_VIDEO.cmd** and paste an MP4 path to run the trained visual baseline on another clip.
+5. Run `.\.venv\Scripts\python.exe -m ml predict --video "C:\path\to\clip.mp4"` to analyze another clip.
 
-If interrupted, run the training launcher again with the same archive. Use a new output directory for a changed experiment. Do not tune on final test results or try many random seeds until the test score looks good.
+If interrupted, run the training command again with the same archive. Use a new output directory for a changed experiment. Do not tune on final test results or try many random seeds until the test score looks good.
 
 For a more careful first run, use PowerShell from the project root to inspect preprocessing before training:
 
