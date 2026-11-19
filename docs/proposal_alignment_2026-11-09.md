@@ -1,6 +1,6 @@
 # Proposal alignment and next milestones — 9 November 2026
 
-Source reviewed: local `Template -  04 - Proposal  Plan.docx`, version 2.0 (20 October 2026). This checklist concerns the implemented software; it does not change the approved proposal or claim that a research target has already been met.
+Source reviewed: local `docs/local-references/Template -  04 - Proposal  Plan.docx`, version 2.0 (20 October 2026). This checklist concerns the implemented software; it does not change the approved proposal or claim that a research target has already been met.
 
 ## Current position
 
@@ -11,8 +11,8 @@ The proposal names FaceForensics++ for visual fine-tuning, DFDC for robustness, 
 | Proposal requirement | Current evidence | Status |
 | --- | --- | --- |
 | Responsive upload UI, FastAPI queue, local processing, scoped cleanup | `frontend/`, `backend/`; MP4 uploads run real models and temporary backend copies are deleted | Implemented locally |
-| Visual: 10–15 FPS, RetinaFace, fine-tuned EfficientNet-B4/Inception, Grad-CAM | Up to 12 sampled frames per video, YuNet, frozen ResNet18 features plus logistic head; no Grad-CAM | Prototype only |
-| Audio: 16 kHz, 128-band log-mel, pretrained spoof backbone | MP4 audio resampled to 16 kHz, 128-band log-mel features summarized for a CPU classifier; no pretrained spoof backbone | Prototype only |
+| Visual: 10–15 FPS, RetinaFace, fine-tuned EfficientNet-B4/Inception, Grad-CAM | Up to 12 sampled frames per video, YuNet, frozen ResNet18 features plus logistic head; no person tracking across frames or Grad-CAM | Prototype only |
+| Audio: 16 kHz, 128-band log-mel, pretrained spoof backbone | MP4 audio resampled to 16 kHz, 128-band log-mel features summarized for a CPU classifier; no speech activity check or pretrained spoof backbone | Prototype only |
 | Three-way REAL / SUSPICIOUS / FAKE **combined** decision | Separate visual and audio predictions; no validated fusion output. Current prominent badge describes the visual channel | Missing |
 | FakeAVCeleb paired four-category fusion benchmark | No FakeAVCeleb data or paired validation/test results | Missing |
 | FF++ and larger DFDC visual robustness checks | 400-video DFDC sample only; no FF++ training/evaluation | Missing |
@@ -28,6 +28,8 @@ The visual [held-out sample result](../ml/experiments/dfdc_sample_cpu_2026-11-06
 This is a possible **false alarm** (a genuine video flagged as manipulated). If the source is not independently authenticated, it remains an observed model disagreement rather than a confirmed error. The visual baseline's small sample and domain shift make false alarms plausible. The current score is an experimental classifier output, not a calibrated probability of forgery.
 
 Do not raise or lower the existing threshold to make one known clip read REAL. Raising the FAKE threshold can reduce false alarms while increasing missed fakes, which is especially consequential in KYC. Preserve the existing checkpoint and test report. Collect an independent, labeled diagnostic set with real and fake examples; inspect face crops, occlusion, blur, compression, frame scores, and audio status. Fit any revised model and select thresholds using training/validation data only, then report a fresh held-out test set without retuning it.
+
+The current face selector rejects competing faces within one frame but does not verify that all accepted frames show the same applicant. The audio gate checks that a track is readable and has some amplitude, not that it contains clear speech. A short, compressed, low-volume clip can therefore produce confident-looking channel scores despite weak KYC evidence. Add face identity continuity, face quality, and speech activity/quality checks as separately measured abstention rules, then validate how many genuine and fake clips they reject. A score from poor evidence should route to review or retry, not be relabeled REAL.
 
 With fake as the positive class, **false acceptance** means a fake is accepted as REAL; **false rejection/false alarm** means a genuine clip is blocked or sent to review. Both should be reported, along with coverage and the number of clips routed to human review. If SUSPICIOUS routes to review, it is not an automatic REAL acceptance.
 

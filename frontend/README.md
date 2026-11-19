@@ -4,23 +4,24 @@ A React and Vite interface for local visual and audio deepfake screening. The co
 
 ## Run the connected model
 
-Double-click **START_APP.cmd** in the parent folder to build the live interface and serve it with the Python backend at http://127.0.0.1:8000. No frontend environment edits are needed. Confirm **Local model ready**, select an MP4, and click **Start analysis**. This uses the real local checkpoint. See the [complete guide](../backend/README.md).
+From the project root in PowerShell, run `cd frontend; npm run build:live; cd ..`, then `.\.venv\Scripts\python.exe -m backend`. This builds the live interface and serves it with the Python backend at http://127.0.0.1:8000. No frontend environment edits are needed. Confirm **Local model ready**, select an MP4, and click **Start analysis**. This uses the real local checkpoint. See the [complete guide](../backend/README.md).
 
 Live uploads are limited to 50 MiB, 60 seconds, 60 FPS, and 4K; 1080p is recommended. Results display actual frame coverage, separate channel scores and thresholds when available, model versions, and upload cleanup status. The models remain experimental. Calibrated fusion, Grad-CAM, upload hashing, and digital signatures remain unavailable.
 
 ## Start the separate demo on Windows
 
-Double-click `START_FRONTEND.cmd` in the parent project folder. It installs missing dependencies, starts the development server, and opens the browser. Keep the terminal open while using the application. Press Ctrl+C in that terminal to stop it.
+From the project root, run `cd frontend`, `npm ci`, set `$env:VITE_USE_MOCKS = "true"`, then run `npm run dev -- --open`. This starts the separate demo and opens the browser. Keep the terminal open while using the application. Press Ctrl+C in that terminal to stop it.
 
 Alternatively, run:
 
 ```powershell
-cd "C:\Users\hp\Desktop\Deep Forsencis\frontend"
-npm install
-npm run dev
+cd frontend
+npm ci
+$env:VITE_USE_MOCKS = "true"
+npm run dev -- --open
 ```
 
-Open the local URL printed in the terminal, normally http://127.0.0.1:5173. If that port is occupied, Vite prints another available port. Once dependencies are installed, `npm run dev` is sufficient for later sessions.
+Open the local URL printed in the terminal, normally http://127.0.0.1:5173. If that port is occupied, Vite prints another available port. Once dependencies are installed, `npm run dev -- --open` is sufficient for later sessions.
 
 Use Node.js 20.19+ or 22.12+ as required by this Vite version. This computer had Node.js 22.16.0 when the project was created. The lockfile records the resolved dependencies.
 

@@ -68,7 +68,7 @@ Source-group bootstrap intervals from 300 resamples were 70.0–95.4% for balanc
 - Feature extraction took about 310 seconds for EfficientNet-B0 and 237 seconds for ResNet18 on this run; classifier fitting was much shorter.
 - The selected checkpoint is approximately 44.8 MB. Generated data and experiment outputs use roughly 0.2 GB, in addition to the approximately 1.1 GB Python environment and 1.87 GB input ZIP.
 
-The actual model is saved locally at `data/runs/cpu_baseline/model.pt`. It is excluded from Git, along with dataset clips and face crops. Run `PREDICT_VIDEO.cmd` from the project root to use the trained model. The React frontend still shows demo results until a backend connects it to this checkpoint.
+The actual model is saved locally at `data/runs/cpu_baseline/model.pt`. It is excluded from Git, along with dataset clips and face crops. Run `.\.venv\Scripts\python.exe -m ml predict --video "C:\path\to\clip.mp4"` from the project root to use the trained model. At the time of this experiment, the React frontend still showed demo results; a backend was connected later.
 
 ## Reproduction and provenance
 

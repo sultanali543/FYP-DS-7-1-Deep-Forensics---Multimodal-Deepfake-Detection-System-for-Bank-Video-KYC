@@ -68,4 +68,4 @@ def activate_run(run, root):
     temporary.write_text(json.dumps(value, indent=2), encoding="utf-8")
     temporary.replace(pointer)
     return {"active_run": str(selected_audio_run(root)), "model_version": summary["model_version"],
-            "message": "Restart START_APP.cmd to load this model. The reference checkpoint remains available."}
+            "message": "Restart the Python backend to load this model. The reference checkpoint remains available."}

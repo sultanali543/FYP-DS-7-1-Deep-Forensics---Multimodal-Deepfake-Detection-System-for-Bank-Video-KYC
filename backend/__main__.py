@@ -30,7 +30,7 @@ def main():
         print(f"Audio model: {model.get('audio_model_version', 'not installed')}")
         return 0
     if not (settings.frontend / "index.html").is_file():
-        print("The connected frontend has not been built. Run START_APP.cmd.")
+        print("The connected frontend has not been built. Run npm run build:live from frontend, then start the backend again.")
         return 1
     # Reserve the exact loopback port before opening a browser.
     listener = socket.socket()

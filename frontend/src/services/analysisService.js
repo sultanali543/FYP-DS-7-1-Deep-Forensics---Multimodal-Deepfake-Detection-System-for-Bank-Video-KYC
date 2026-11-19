@@ -70,7 +70,7 @@ export function createAnalysisService({ useMocks = true, baseUrl = 'http://127.0
 
 const env = import.meta.env ?? {};
 export function serviceConfig(environment) {
-  // START_APP builds in live mode and serves the UI and API on the same origin.
+  // The live build serves the UI and API on the same origin.
   return {
     useMocks: environment.MODE === 'live' ? false : environment.VITE_USE_MOCKS !== 'false',
     baseUrl: environment.MODE === 'live' ? '/' : environment.VITE_API_BASE_URL || 'http://127.0.0.1:8000',
