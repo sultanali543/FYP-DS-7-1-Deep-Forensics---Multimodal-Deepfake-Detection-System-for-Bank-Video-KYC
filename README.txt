@@ -7,7 +7,11 @@ prove fraud or identity; a validated combined decision is future work.
 
 RUN THE REAL APP ON THIS LAPTOP
 -------------------------------
-Open PowerShell in this project folder and enter:
+Double-click START_APP.cmd in this folder. It checks the installed models,
+builds the live frontend, and opens the connected app. Keep its window open.
+
+If that local start file is missing, open PowerShell in this project folder
+and enter:
 
   cd frontend
   npm run build:live
@@ -50,6 +54,7 @@ Train the visual baseline with the labeled DFDC sample:
   .\.venv\Scripts\python.exe -m ml run --source "C:\path\to\train_sample_videos.zip"
 
 Start the separate interface demo (fixed sample scores, no model analysis):
+  Double-click START_FRONTEND.cmd on this laptop, or run:
   cd frontend
   $env:VITE_USE_MOCKS = "true"
   npm run dev -- --open

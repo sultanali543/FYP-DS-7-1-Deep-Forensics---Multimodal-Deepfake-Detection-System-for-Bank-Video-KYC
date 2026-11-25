@@ -55,6 +55,10 @@ checkpoints/
 /docs/local-references/
 /frontend-preview.jpg
 
+# Optional click-to-start scripts kept on this laptop
+/START_APP.cmd
+/START_FRONTEND.cmd
+
 # Editor and operating-system files
 .vscode/
 .idea/

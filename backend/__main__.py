@@ -1,6 +1,9 @@
 """Start the connected app on this computer only."""
 import argparse
+import os
+from pathlib import Path
 import socket
+import subprocess
 import threading
 import time
 import webbrowser
@@ -9,6 +12,28 @@ import uvicorn
 
 from .app import create_app, model_readiness
 from .config import Settings
+
+
+def open_browser_window(url):
+    """Open a visible browser window on Windows after the server is ready."""
+    if os.name == "nt":
+        folders = [os.environ.get("PROGRAMFILES"), os.environ.get("PROGRAMFILES(X86)")]
+        for relative in ("Google/Chrome/Application/chrome.exe", "Microsoft/Edge/Application/msedge.exe"):
+            for folder in folders:
+                if not folder:
+                    continue
+                browser = Path(folder) / relative
+                if browser.is_file():
+                    try:
+                        subprocess.Popen([str(browser), "--new-window", url],
+                                         creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+                        return True
+                    except OSError:
+                        continue
+    try:
+        return webbrowser.open(url, new=1, autoraise=True)
+    except OSError:
+        return False
 
 
 def main():
@@ -47,7 +72,9 @@ def main():
     def open_when_ready():
         for _ in range(150):
             if server.started:
-                webbrowser.open("http://127.0.0.1:8000")
+                url = "http://127.0.0.1:8000"
+                if not open_browser_window(url):
+                    print(f"Open {url} in your browser.", flush=True)
                 return
             if server.should_exit:
                 return
