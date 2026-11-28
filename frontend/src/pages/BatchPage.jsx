@@ -6,7 +6,7 @@ import { runBatch } from '../lib/batchQueue.js';
 import { analysisService } from '../services/analysisService.js';
 import { SCENARIOS } from '../mocks/analyses.js';
 
-const MAX_BATCH = 20;
+const MAX_BATCH = 10;
 const labels = { ready: 'Ready', rejected: 'Check file', waiting: 'Waiting for slot', uploading: 'Uploading', queued: 'Queued', running: 'Analyzing', complete: 'Complete', failed: 'Failed', insufficient_evidence: 'Insufficient evidence' };
 
 export default function BatchPage({ isDemo, health, onRecord, onOpen, onExport, onProgress }) {

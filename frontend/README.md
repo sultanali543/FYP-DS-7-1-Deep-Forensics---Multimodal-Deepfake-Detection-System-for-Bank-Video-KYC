@@ -36,7 +36,7 @@ Use Node.js 20.19+ or 22.12+ as required by this Vite version. This computer had
 
 ## Process multiple videos
 
-Open **Batch processing** in the sidebar, select or drop up to 20 MP4 files, and click **Start batch**. Each file has its own status and result. Invalid files are marked before upload; a failed file does not stop the remaining queue. Open an individual result for its visual and audio findings, or export the completed batch results as JSON. In demo mode all videos use the selected sample scenario and no model runs.
+Open **Batch processing** in the sidebar, select or drop up to 10 MP4 files, and click **Start batch**. Each file has its own status and result. Invalid files are marked before upload; a failed file does not stop the remaining queue. Open an individual result for its visual and audio findings, or export the completed batch results as JSON. In demo mode all videos use the selected sample scenario and no model runs.
 
 In connected mode the browser keeps at most two submissions in flight and waits when the backend queue is full. The backend still runs one CPU inference job at a time and accepts up to three active jobs. This improves upload overlap and operator workflow, but does not increase model inference speed. Elapsed time appears beside completed live jobs. Uploaded backend copies are deleted after each analysis; original files stay on the user's computer. Batch state stays in the open browser page and is lost on reload; completed metadata is also added to Recent sessions.
 
