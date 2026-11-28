@@ -6,9 +6,11 @@ import UploadPage from './pages/UploadPage.jsx';
 import ProcessingPage from './pages/ProcessingPage.jsx';
 import ResultsPage from './pages/ResultsPage.jsx';
 import HistoryPage from './pages/HistoryPage.jsx';
+import OverviewPage from './pages/OverviewPage.jsx';
 import { analysisService } from './services/analysisService.js';
 import { readHistory, writeHistory, validateVideo, validateLiveMetadata } from './lib/utils.js';
 import WorkflowGuide from './components/WorkflowGuide.jsx';
+import { ProcessingStreams, EvidenceInspector } from './components/DualStreamPanel.jsx';
 
 function saveDownload(blob, filename) {
   const url = URL.createObjectURL(blob);
@@ -19,12 +21,13 @@ function saveDownload(blob, filename) {
 }
 
 export default function App() {
-  const [view, setView] = useState('upload');
+  const [view, setView] = useState('overview');
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [source, setSource] = useState(null);
   const [ready, setReady] = useState(false);
   const [fileError, setFileError] = useState(null);
+  const [fingerprint, setFingerprint] = useState({ status: 'idle', value: null });
   const [scenario, setScenario] = useState('fake');
   const [active, setActive] = useState(null);
   const [progress, setProgress] = useState(null);
@@ -66,10 +69,21 @@ export default function App() {
     return () => URL.revokeObjectURL(url);
   }, [file]);
 
+  useEffect(() => {
+    if (!file) { setFingerprint({ status: 'idle', value: null }); return; }
+    let cancelled = false;
+    setFingerprint({ status: 'working', value: null });
+    if (!globalThis.crypto?.subtle) { setFingerprint({ status: 'unavailable', value: null }); return; }
+    file.arrayBuffer().then((bytes) => crypto.subtle.digest('SHA-256', bytes)).then((digest) => {
+      if (!cancelled) setFingerprint({ status: 'complete', value: Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('') });
+    }).catch(() => { if (!cancelled) setFingerprint({ status: 'unavailable', value: null }); });
+    return () => { cancelled = true; };
+  }, [file]);
+
   useEffect(() => { try { writeHistory(window.sessionStorage, history); } catch { /* The current session still works when storage is unavailable. */ } }, [history]);
   useEffect(() => () => { startController.current?.abort(); reportController.current?.abort(); }, []);
   useEffect(() => {
-    document.title = `${view === 'results' ? 'Analysis results' : view === 'history' ? 'Recent sessions' : view === 'processing' ? 'Processing' : 'New analysis'} · Deep Forensics`;
+    document.title = `${view === 'overview' ? 'Command overview' : view === 'results' ? 'Analysis results' : view === 'history' ? 'Recent sessions' : view === 'processing' ? 'Processing' : 'New analysis'} · Deep Forensics`;
     window.scrollTo(0, 0);
     document.getElementById('main-content')?.focus({ preventScroll: true });
   }, [view]);
@@ -156,15 +170,18 @@ export default function App() {
   const isDemo = analysisService.isDemo;
   const busy = !!active || submitting;
   return <>
-    <AppLayout {...{ view, isDemo, busy }} historyCount={history.length} onNavigate={navigate} onHelp={() => setHelpOpen(true)}>
+    <AppLayout {...{ view, isDemo, busy, health }} historyCount={history.length} onNavigate={navigate} onHelp={() => setHelpOpen(true)}>
       {appError && <div className="app-error"><Notice tone="danger" icon="warning">{appError}</Notice><button className="text-button" onClick={() => setAppError(null)}>Dismiss</button></div>}
-      {view === 'upload' && <UploadPage {...{ isDemo, health, scenario, setScenario, file, source, ready, submitting }} url={previewUrl} error={fileError} onSelect={selectFile} onReady={(metadata) => { if (fileRef.current !== file) return; const error = isDemo ? null : validateLiveMetadata(metadata); setSource(metadata); setReady(!error); setFileError(error); }} onInvalid={invalidatePreview} onRemove={() => { setFile(null); setSource(null); setReady(false); setFileError(null); }} onStart={() => startAnalysis(false)} onExample={() => startAnalysis(true)} />}
+      {view === 'overview' && <OverviewPage {...{ isDemo, health }} onEnter={() => navigate('upload')} onPreset={(choice) => { if (isDemo) setScenario(choice); navigate('upload'); }} />}
+      {view === 'upload' && <UploadPage {...{ isDemo, health, scenario, setScenario, file, source, ready, submitting, fingerprint }} url={previewUrl} error={fileError} onSelect={selectFile} onReady={(metadata) => { if (fileRef.current !== file) return; const error = isDemo ? null : validateLiveMetadata(metadata); setSource(metadata); setReady(!error); setFileError(error); }} onInvalid={invalidatePreview} onRemove={() => { setFile(null); setSource(null); setReady(false); setFileError(null); }} onStart={() => startAnalysis(false)} onExample={() => startAnalysis(true)} />}
       {view === 'processing' && active && <ProcessingPage {...{ active, progress, isDemo, health }} onLeave={() => { setActive(null); setProgress(null); setView('upload'); }} />}
+      {view === 'processing' && active && <ProcessingStreams isDemo={isDemo} audioReady={!isDemo && health?.audio_ready === true} />}
       {view === 'results' && result && <ResultsPage {...{ result, downloading }} previewUrl={previewAnalysisId === result.id ? previewUrl : null} onNew={resetUpload} onRetry={retryAnalysis} onReport={() => setReportOpen(true)} onJson={() => saveDownload(new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' }), `${result.id}-result.json`)} onBackendReport={downloadBackendReport} />}
+      {view === 'results' && result && <EvidenceInspector result={result} />}
       {view === 'history' && <HistoryPage records={history} onOpen={(record) => { setResult(record); setAppError(null); setView('results'); }} onClear={() => setHistory([])} onNew={resetUpload} />}
     </AppLayout>
     {helpOpen && <Modal title="About this workspace" onClose={() => setHelpOpen(false)} footer={<Button onClick={() => setHelpOpen(false)}>Back to workspace</Button>}><WorkflowGuide isDemo={isDemo} audioReady={health?.audio_ready === true} /></Modal>}
-    {reportOpen && result && <Modal title={result.mode === 'demo' ? 'Sample report preview' : 'Analysis summary'} onClose={() => setReportOpen(false)} footer={<><Button variant="secondary" onClick={() => setReportOpen(false)}>Close</Button><Button icon="print" onClick={() => window.print()}>Print / Save PDF</Button></>}><ReportView result={result} /></Modal>}
+    {reportOpen && result && <Modal title={result.mode === 'demo' ? 'Sample dossier preview' : 'Unsigned audit summary'} onClose={() => setReportOpen(false)} footer={<><Button variant="secondary" onClick={() => setReportOpen(false)}>Close</Button><Button icon="print" onClick={() => window.print()}>Print / Save PDF</Button></>}><ReportView result={result} /></Modal>}
     {result?.status === 'complete' && <div className="print-report"><ReportView result={result} /></div>}
   </>;
 }
