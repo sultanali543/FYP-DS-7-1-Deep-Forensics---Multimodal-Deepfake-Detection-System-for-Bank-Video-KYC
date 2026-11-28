@@ -27,7 +27,7 @@ Use Node.js 20.19+ or 22.12+ as required by this Vite version. This computer had
 
 ## Try the complete workflow
 
-1. Open **Live workstation** from the overview. Choose an MP4 up to 50 MB and wait for its browser preview and fingerprint, or click **Try an example** with no video.
+1. Open **Single video** from the sidebar for a detailed preview. Choose an MP4 up to 50 MB and wait for its browser preview and fingerprint, or click **Try an example** with no video. Choosing several MP4s here opens the batch queue automatically.
 2. Choose a sample scenario in Analysis setup: high risk, needs review, low risk, insufficient evidence, or processing error.
 3. Start the demo and watch the simulated stages.
 4. Review the sample visual result and the unavailable audio/evidence states.
@@ -36,7 +36,7 @@ Use Node.js 20.19+ or 22.12+ as required by this Vite version. This computer had
 
 ## Process multiple videos
 
-Open **Batch processing** in the sidebar, select or drop up to 10 MP4 files, and click **Start batch**. Each file has its own status and result. Invalid files are marked before upload; a failed file does not stop the remaining queue. Open an individual result for its visual and audio findings, or export the completed batch results as JSON. In demo mode all videos use the selected sample scenario and no model runs.
+Open **Batch upload · up to 10** from the overview or sidebar, select or drop up to 10 MP4 files, and click **Start batch**. The single-video upload picker also accepts multiple files and redirects them into this queue. Each file has its own status and result. Invalid files are marked before upload; a failed file does not stop the remaining queue. Open an individual result for its visual and audio findings, or export the completed batch results as JSON. In demo mode all videos use the selected sample scenario and no model runs.
 
 In connected mode the browser keeps at most two submissions in flight and waits when the backend queue is full. The backend still runs one CPU inference job at a time and accepts up to three active jobs. This improves upload overlap and operator workflow, but does not increase model inference speed. Elapsed time appears beside completed live jobs. Uploaded backend copies are deleted after each analysis; original files stay on the user's computer. Batch state stays in the open browser page and is lost on reload; completed metadata is also added to Recent sessions.
 

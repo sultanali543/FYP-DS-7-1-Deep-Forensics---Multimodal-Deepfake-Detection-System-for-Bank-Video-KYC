@@ -9,7 +9,7 @@ import { SCENARIOS } from '../mocks/analyses.js';
 const MAX_BATCH = 10;
 const labels = { ready: 'Ready', rejected: 'Check file', waiting: 'Waiting for slot', uploading: 'Uploading', queued: 'Queued', running: 'Analyzing', complete: 'Complete', failed: 'Failed', insufficient_evidence: 'Insufficient evidence' };
 
-export default function BatchPage({ isDemo, health, onRecord, onOpen, onExport, onProgress }) {
+export default function BatchPage({ isDemo, health, incomingFiles, onIncomingHandled, onSingle, onRecord, onOpen, onExport, onProgress }) {
   const input = useRef(null);
   const controller = useRef(null);
   const [rows, setRows] = useState([]);
@@ -20,11 +20,12 @@ export default function BatchPage({ isDemo, health, onRecord, onOpen, onExport, 
 
   useEffect(() => () => controller.current?.abort(), []);
   useEffect(() => { onProgress(running ? 'BATCH ACTIVE' : rows.length ? `${rows.length} SELECTED` : 'BATCH READY'); }, [running, rows.length, onProgress]);
+  useEffect(() => { if (incomingFiles?.length) { addFiles(incomingFiles); onIncomingHandled(); } }, [incomingFiles]);
 
   function addFiles(files) {
     const selected = Array.from(files || []);
     if (!selected.length) return;
-    if (running) return;
+    if (running) { setMessage('Wait for the current batch to finish before adding more videos.'); return; }
     setRows((current) => {
       const keys = new Set(current.map((row) => `${row.file.name}:${row.file.size}:${row.file.lastModified}`));
       const added = [];
@@ -65,6 +66,7 @@ export default function BatchPage({ isDemo, health, onRecord, onOpen, onExport, 
   const doneCount = rows.filter((row) => ['complete', 'failed', 'insufficient_evidence'].includes(row.status)).length;
   return <section className="batch-page">
     <PageHeading eyebrow="02 / BATCH WORKSTATION" title="Analyze a collection of sessions.">Select up to {MAX_BATCH} MP4 files. Each video receives its own analysis and result.</PageHeading>
+    <div className="analysis-mode-switch" aria-label="Analysis mode"><button onClick={onSingle}><Icon name="scan" size={17} /> Single video</button><span className="active"><Icon name="video" size={17} /> Batch upload · up to 10 videos</span></div>
     <Notice tone="amber">{isDemo ? 'Demo mode uses fixed sample scores for every selected video. No model inference occurs.' : 'Connected mode uses the local models. The backend currently processes one video at a time while later submissions wait in its queue.'}</Notice>
     <div className="batch-toolbar">
       <input ref={input} className="visually-hidden" type="file" accept="video/mp4,.mp4" multiple aria-label="Choose multiple MP4 videos" onChange={(event) => { addFiles(event.target.files); event.target.value = ''; }} />

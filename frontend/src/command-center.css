@@ -1822,6 +1822,10 @@ to {
 }
 
 .batch-page { animation:surface-enter .4s ease-out }
+.analysis-mode-switch { display:flex; align-items:center; gap:8px; width:max-content; max-width:100%; padding:6px; margin:20px 0 22px; border:1px solid #2b4259; border-radius:11px; background:#101b2d }
+.analysis-mode-switch button,.analysis-mode-switch .active { display:inline-flex; align-items:center; justify-content:center; gap:9px; min-height:39px; padding:8px 15px; border:1px solid transparent; border-radius:7px; background:transparent; color:#91a9bc; font-size:11px; font-weight:600; white-space:nowrap }
+.analysis-mode-switch button:hover { color:#eaf9ff; background:#1b3447 }
+.analysis-mode-switch .active { border-color:#2c8392; color:#9ff8ff; background:#103b49 }
 .batch-toolbar { margin-top:25px; border:1px solid #2a4057; border-radius:16px; background:#101c2edb; overflow:hidden }
 .batch-dropzone { margin:18px; min-height:145px; padding:24px; display:flex; align-items:center; gap:20px; border:1.5px dashed #3a6b80; border-radius:12px; background:radial-gradient(circle at 50% 10%,#102b43,#0b1528 75%); color:#00d9ea }
 .batch-dropzone.dragging { border-color:#00f0ff; background:#103448 }
@@ -1854,6 +1858,8 @@ to {
 .batch-footnote { color:#819db2; line-height:1.6; font-size:10px; margin-top:17px }
 
 @media(max-width:700px) {
+  .analysis-mode-switch { width:100%; flex-wrap:wrap }
+  .analysis-mode-switch button,.analysis-mode-switch .active { flex:1; white-space:normal }
   .batch-dropzone { flex-wrap:wrap }
   .batch-row { flex-wrap:wrap }
   .batch-file { flex-basis:calc(100% - 40px) }
