@@ -16,7 +16,9 @@ export function createAnalysisService({ useMocks = true, baseUrl = 'http://127.0
     if (!response.ok) {
       let message = `The server could not complete the request (${response.status}).`;
       try { const payload = await response.json(); if (typeof payload.detail === 'string') message = payload.detail; } catch { /* Keep the readable status message. */ }
-      throw new Error(message);
+      const error = new Error(message);
+      error.status = response.status;
+      throw error;
     }
     return response;
   }

@@ -34,6 +34,12 @@ Use Node.js 20.19+ or 22.12+ as required by this Vite version. This computer had
 5. Use **View sample report**, then **Print / Save PDF**, or **Export JSON**.
 6. Open **Recent sessions** to revisit the last 20 records in this browser tab. Videos are not stored. Clearing the history removes those local records.
 
+## Process multiple videos
+
+Open **Batch processing** in the sidebar, select or drop up to 20 MP4 files, and click **Start batch**. Each file has its own status and result. Invalid files are marked before upload; a failed file does not stop the remaining queue. Open an individual result for its visual and audio findings, or export the completed batch results as JSON. In demo mode all videos use the selected sample scenario and no model runs.
+
+In connected mode the browser keeps at most two submissions in flight and waits when the backend queue is full. The backend still runs one CPU inference job at a time and accepts up to three active jobs. This improves upload overlap and operator workflow, but does not increase model inference speed. Elapsed time appears beside completed live jobs. Uploaded backend copies are deleted after each analysis; original files stay on the user's computer. Batch state stays in the open browser page and is lost on reload; completed metadata is also added to Recent sessions.
+
 No dataset or Python backend is needed for Demo mode. No model inference occurs. Scores are fixed fixtures and do not describe the selected video. Demo audio stays unavailable; the connected app can run the trained audio model. Browser SHA-256 calculation is available for a selected file. Grad-CAM generation, backend evidence sealing, digital signatures, and protected audit logging are not implemented.
 
 ## Check the project
